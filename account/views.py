@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, SupplierProfileForm
-from .models import Supplier
+from .models import Supplier 
+from store.models import Customer
 # Create your views here.
 
 def register(request):
@@ -16,7 +17,12 @@ def register(request):
             # Controlla se l'utente è un fornitore
             is_supplier = user_form.cleaned_data['is_supplier']
             if is_supplier:
+                user.is_staff=True
+                user.save()
+                
                 Supplier.objects.create(user=user, is_supplier=True)
+            else:
+                Customer.objects.create(user=user)
             login(request, user)
 
             return redirect('store:home_store')
