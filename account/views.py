@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from django.contrib.auth.models import User
-from .forms import UserRegistrationForm, SupplierProfileForm
+from .forms import UserRegistrationForm
 from .models import Supplier 
 from store.models import Customer
 # Create your views here.
