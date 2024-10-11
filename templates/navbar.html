@@ -1,0 +1,90 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#!">ECOM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">All Products</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            
+            <form class="d-flex">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
+            
+            <!-- Per login/logout-->
+            {% if user.is_authenticated %}
+                <form action="{% url 'account:logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                    <button type="submit" class="custom-logout-button">Logout</button>
+                </form>
+
+                <style>
+                    .custom-logout-button {
+                        background-color: white;
+                        border: 2px solid red;
+                        padding: 7px 18px;
+                        color: red;
+                        font: inherit;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        border-radius: 12px;                  
+                        font-size: 14px;    
+                        margin-left: 20px;
+                    }
+            
+                    .custom-logout-button:hover {
+                        background-color: red;
+                        color: white;
+                        border-color: red;
+                    }
+                </style>
+                
+
+            {% else %}
+                <form action="{% url 'account:login' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                        <button type="submit" class="custom-login-button">Login</button>
+                    </form>
+                <style>
+                    .custom-login-button {
+                        background-color: white;
+                        border: 2px solid green;
+                        padding: 7px 18px;
+                        color: green;
+                        font: inherit;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        border-radius: 12px;                  
+                        font-size: 14px; 
+                        margin-right: 20px;   /* Spazio tra i bottoni */
+                        margin-left:20px
+                    }
+            
+                    .custom-login-button:hover {
+                        background-color: green;
+                        color: white;
+                        border-color: green;
+                    }
+                </style>
+            {% endif %}
+            
+
+
+        </div>
+    </div>
+</nav>
