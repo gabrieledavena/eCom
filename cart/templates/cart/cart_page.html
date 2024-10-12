@@ -10,8 +10,63 @@
             </div>
         </header>
         <!-- Section-->
-        <!-- Section-->
+        <br/>
 
+        {% if products %}
+            {% for product in products %}
+
+                <div class="card mb-3" >
+                    <div class="row g-0">
+                       <div class="col-md-4">
+                        <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="...">
+                       </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                            <div style="text-align: center;">
+                                <h5 class="card-title">{{product.nome}}</h5>
+                                <p class="card-text">{{product.description}}</p>
+
+                                <p class="card-text">€ {{product.price}}</p>
+
+                                <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p>
+
+                                <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete_product">Elimina</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+            <br/><br/><br/><br/>
+            <div style="text-align: center;">
+            <h1> Non c'è niente nel tuo carrello </h1></div>
+            <br/><br/><br/><br/><br/>
+        {% endif %}
+
+    <script>
+        //Per cancellare il prodotto
+        $(document).on('click', '.delete_product', function (e){
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart:cart_delete' %}',
+                data: {
+                    product_id: $(this).data('index'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+                success: function (json){
+                    location.reload()
+                },
+                error: function (xhr, errmsg, err) {
+                }
+            });
+        })
+    </script>
 
 {% endblock %}
         
