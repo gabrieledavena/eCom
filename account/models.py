@@ -16,6 +16,6 @@ class Customer(models.Model):
     cognome = models.CharField(default='', max_length=50)
     email =models.EmailField(default='', max_length=50)
     password= models.CharField(default='', max_length=50)
-
+    indirizzo = models.CharField(default='', max_length=50)
     def __str__(self):
         return f'{self.user.username} {self.cognome} {self.nome}'

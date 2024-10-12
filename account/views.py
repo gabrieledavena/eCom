@@ -1,9 +1,15 @@
+from django.urls import reverse
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, CustomerProfileForm
 from .models import Supplier 
-from store.models import Customer
+from store.models import Customer, User
 # Create your views here.
+from django.contrib import messages
+from django.views.generic import UpdateView
+
 
 def register(request):
     if request.method == 'POST':
@@ -29,3 +35,12 @@ def register(request):
         user_form = UserRegistrationForm()
 
     return render(request, 'account/register.html', {'user_form': user_form})
+
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Customer
+    form_class = CustomerProfileForm
+    template_name = 'account/update_user.html'
+
+    def get_success_url(self):
+        pk = self.get_context_data()["object"].pk
+        return reverse('store:home_store')
