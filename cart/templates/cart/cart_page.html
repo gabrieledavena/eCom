@@ -1,5 +1,34 @@
 {%extends 'base.html' %}
+{% block head_plug %}
+<style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        .container {
+            display: flex;
+            gap: 70px;
+        }
+
+        .left-section {
+            flex: 3;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin-bottom: 50px; /* Distanza dal footer/banner inferiore */
+
+        }
+
+        .right-section {
+            flex: 1;
+            background-color: rgba(252, 255, 198, 0.98);
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 15px;
+            margin: 6px;
+            max-height: 125px;
+        }
+    </style>
+{% endblock %}
 {%block content %}
         <!-- Header-->
         <header class="bg-dark py-5">
@@ -11,7 +40,8 @@
         </header>
         <!-- Section-->
         <br/>
-
+<div class="container">
+        <div class="left-section">
         {% if products %}
             {% for product in products %}
 
@@ -36,15 +66,15 @@
                         </div>
                     </div>
                 </div>
-
             {% endfor %}
-            Total = {{totals}}
         {% else %}
             <br/><br/><br/><br/>
             <div style="text-align: center;">
             <h1> Non c'è niente nel tuo carrello </h1></div>
             <br/><br/><br/><br/><br/>
         {% endif %}
+        </div>
+
 
     <script>
         //Per cancellare il prodotto
@@ -67,6 +97,13 @@
             });
         })
     </script>
+        <div class="right-section">
+            <div style="text-align: center;">
+            <h1>Resoconto </h1>
+                Totale : €{{totals}}
+            </div>
+        </div>
 
+</div>
 {% endblock %}
         
