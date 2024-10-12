@@ -24,15 +24,21 @@
             </ul>
 
             
-            <form class="d-flex">
+            
+            
+            <!-- Per login/logout-->
+            
+            {% if not user.is_staff %}
+                <form class="d-flex">
                 <a href="{% url 'cart:cart_page' %}" class="btn btn-outline-dark"><i class="bi-cart-fill me-1"></i>
                     Carrello
                     <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                 </a>
-            </form>
+                </form>
+            {% endif %}
             
-            <!-- Per login/logout-->
             {% if user.is_authenticated %}
+                
                 <form action="{% url 'account:logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                     <button type="submit" class="custom-logout-button">Logout</button>
