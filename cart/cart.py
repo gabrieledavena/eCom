@@ -17,3 +17,7 @@ class Cart():
             self.cart[product_id] = {'price': str(product.price)}
 
         self.session.modified = True
+
+    #Per aggiornare il numero del carrello
+    def __len__(self):
+        return len(self.cart)
