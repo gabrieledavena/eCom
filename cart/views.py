@@ -7,6 +7,9 @@ from .cart import Cart
 from store.models import Prodotto
 from django.http import JsonResponse
 
+#Per i messaggi
+from django.contrib import messages
+
 
 # Create your views here.
 def cart_page(request):
@@ -21,12 +24,16 @@ def cart_add(request):
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('product_id'))
         product = get_object_or_404(Prodotto, id=product_id)
+        carr_vecchio = cart.__len__()
         cart.add(product=product)
 
         cart_quantity = cart.__len__()
         #response = JsonResponse({'Product Name': product.nome})
         response = JsonResponse({'quantity': cart_quantity})
-
+        if carr_vecchio == cart.__len__():
+            messages.success(request, ("Prodotto già presente nel carrello"))
+        else:
+            messages.success(request, ("Prodotto aggiunto al carrello"))
         return response
 
 
@@ -38,5 +45,6 @@ def cart_delete(request):
         cart.delete(product = product_id)
 
         response = JsonResponse({'product': product_id})
+        messages.success(request, ("Prodotto tolto dal carrello"))
 
         return response

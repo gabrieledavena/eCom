@@ -22,8 +22,8 @@ class Cart():
         product_id = str(product.id)
         if product_id not in self.cart:
             # È come un dizionario
-            self.cart[product_id] = {'price': str(product.price)}
 
+            self.cart[product_id] = {'price': str(product.price)}
         self.session.modified = True
 
     #Per aggiornare il numero del carrello

@@ -21,12 +21,33 @@
         {% block head_plug%}
             
         {% endblock %}
-    
+       
+    <style>
+        .custom-alert {
+            width: fit-content; /* Adatta la larghezza al contenuto */
+            max-width: 80%; /* Imposta una larghezza massima per evitare che sia troppo largo */
+            margin: 20px auto; /* Centra orizzontalmente e aggiunge margine verticale */
+            padding: 15px 40px; /* Aumenta lo spazio interno */
+            text-align: center; /* Testo centrato */
+            border-radius: 15px; /* Angoli arrotondati */
+        }
+    </style>
     </head>
     <body>
     
         {%include 'navbar.html' %}
-
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show custom-alert" role="alert">
+                <div style="text-align: center;">
+                    {{ message }}
+                </div>    
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+            {% endfor %}
+        {% endif %}
         {% block content%} 
         
         {% endblock%}
