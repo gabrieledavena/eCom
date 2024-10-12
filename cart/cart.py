@@ -3,6 +3,9 @@ from itertools import product
 from store.models import Prodotto
 
 
+
+
+
 class Cart():
     def __init__(self, request):
         self.session = request.session
@@ -40,3 +43,11 @@ class Cart():
             del self.cart[product_id]
 
         self.session.modified = True
+
+
+    def total(self):
+        total = 0
+        for product in self.get_products():
+            total += product.price
+        self.session.modified = True
+        return total
