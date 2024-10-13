@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block head_plug %}
+<style>
+        body{
+            font-family: Arial, sans-serif;
+        }
+
+        .mycontainer {
+            display: flex;
+            gap: 70px;
+        }
+
+        .left, .right {
+            flex: 1; /* Ogni sezione prende metà della larghezza */
+            display: flex;
+            margin-bottom: 50px; /* Distanza dal footer/banner inferiore */
+            margin-top: 50px;
+            padding: 20px;
+
+        }
+
+        .left {
+            background-color: #eafafd;
+        }
+
+        .right {
+            background-color: lightcoral;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<header class="bg-dark py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Profilo</h1>
+        </div>
+    </div>
+</header>
+
+<div class="mycontainer">
+        <div class="left">
+            <div class="card-body">
+                <div style="text-align: center;">
+                <h3 class="card-title">Nome Completo : {{ object.nome }} {{ object.cognome }}</h3>
+                    <br>
+                <p class="card-text"><strong>Email: {{ object.email }}</strong></p>
+                <p class="card-text"><strong>Indirizzo: {{ object.indirizzo }}</strong></p>
+                <a  href="{% url 'account:update_user' object.pk %}" class="btn btn-outline-dark" >Aggiorna profilo</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="right">
+            <h1>Sezione Destra</h1>
+        </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

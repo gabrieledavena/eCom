@@ -8,7 +8,7 @@ from .models import Supplier
 from store.models import Customer, User
 # Create your views here.
 from django.contrib import messages
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView
 
 
 def register(request):
@@ -44,3 +44,7 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         pk = self.get_context_data()["object"].pk
         return reverse('store:home_store')
+
+class CustomerProfileView(LoginRequiredMixin, DetailView):
+    model = Customer
+    template_name = 'account/customerprofile.html'
