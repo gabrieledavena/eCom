@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_not_required
 from django.shortcuts import redirect, get_object_or_404, render
 from .models import Prodotto, Category
 

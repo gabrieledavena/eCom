@@ -53,7 +53,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
     #custom login required
-    "ecom.middleware.CustomLoginRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "ecom.urls"
@@ -134,7 +133,7 @@ MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = "/store/?login=ok"
 LOGIN_URL = "/account/login/?auth=notok"
+LOGIN_REDIRECT_URL = "/store/?auth=ok"
 
 LOGOUT_REDIRECT_URL = '/store'  # Assicurati che 'home' sia un nome di URL valido
