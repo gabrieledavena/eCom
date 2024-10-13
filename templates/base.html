@@ -32,7 +32,6 @@
             border-radius: 15px; /* Angoli arrotondati */
         }
         footer {
-            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -41,11 +40,15 @@
             text-align: center;
             padding: 10px;
         }
+        
     </style>
     </head>
     <body>
     
         {%include 'navbar.html' %}
+        {% block banner %}
+            
+        {% endblock %}
         
         {% if messages %}
             {% for message in messages %}

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
 from .models import Supplier 
@@ -80,3 +80,13 @@ def addproduct(request):  # Assicurati che sia 'supplier_id'
         form = ProductForm()
 
     return render(request, 'account/add_product.html', {'form': form, 'supplier': supplier})
+
+def delete_product(request, pk):
+    product = get_object_or_404(Prodotto, id=pk)
+    print(f"Attempting to delete product: {product.nome}")
+
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, "Prodotto eliminato con successo!")
+        return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore
+    return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore

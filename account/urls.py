@@ -1,4 +1,5 @@
 import profile
+from tkinter.font import names
 
 from django.urls import path
 from .views import *
@@ -13,7 +14,8 @@ urlpatterns = [
     path("register/", register, name= 'register'),
     path("Customerprofile/<int:pk>/", CustomerProfileView.as_view(), name= 'customerprofile'),
     path("Supplierprofile/<int:pk>/", SupplierProfileView.as_view(), name='supplierprofile'),
-    path("addproduct", addproduct, name='addproduct'),
+    path("addproduct/", addproduct, name='addproduct'),
+    path("deleteproduct/<int:pk>", delete_product, name='deleteproduct'),
 
     path("update_user/<int:pk>", CustomerUpdateView.as_view(), name= 'update_user'),
 ]

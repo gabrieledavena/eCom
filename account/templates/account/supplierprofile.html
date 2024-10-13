@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block head_plug %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
         body{
             font-family: Arial, sans-serif;
@@ -47,26 +48,37 @@
             }
 
         .add-product-button {
-    text-align: center; /* Centra il bottone orizzontalmente */
-    margin-top: 20px; /* Spazio sopra il bottone */
-}
+            text-align: center; /* Centra il bottone orizzontalmente */
+            margin-top: 20px; /* Spazio sopra il bottone */
+        }
 
-.add-product-button button {
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .add-product-button button {
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #605d5d;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.add-product-button button:hover {
-    background-color: #ddd;
-}
+        .add-product-button button:hover {
+            background-color: #ddd;
+        }
+        .delete-button {
+            background: none; /* Rimuove lo sfondo */
+            color: red; /* Colore dell'icona */
+            border: None;
+            font-size: 35px; /* Dimensione dell'icona */
+            cursor: pointer; /* Cambia il cursore quando si passa sopra */
+        }
+
+        .delete-button:hover {
+            color: darkred; /* Colore quando si passa sopra */
+        }
     </style>
 {% endblock %}
 
-{% block content %}
-
+<!-- BANNER -->
+{% block banner %}
 <header class="bg-dark py-1">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -74,7 +86,11 @@
         </div>
     </div>
 </header>
+{% endblock %}
 
+
+
+{% block content %}
 <div class="mycontainer">
         <div class="left">
             <div class="card-body">
@@ -101,14 +117,23 @@
                       </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                            <div style="text-align: center;">
-                            <h5 class="card-title">{{product.nome}}</h5>
-                            <p class="card-text">{{product.description}}</p>
+                                <div style="text-align: center;">
+                                    <h5 class="card-title">{{product.nome}}</h5>
+                                    <p class="card-text">{{product.description}}</p>
+                                    <p class="card-text">€ {{product.price}}</p>
+                                </div></div>
 
-                            <p class="card-text">€ {{product.price}}</p>
-                        </div>
-                        </div>
-                      </div>
+
+                            </div>
+                        <div class="col-md-2 text-end">
+                                <br>
+                                    <form action="{% url 'account:deleteproduct' product.id %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                        <button type="submit" class="delete-button" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?');">
+                                        <i class="fas fa-trash"></i> <!-- Icona del cestino -->
+                                        </button>
+                                    </form>
+                                </div>
                     </div>
                   </div>
                 {% empty %}
