@@ -10,39 +10,67 @@
             gap: 70px;
         }
 
-        .left, .right {
-            flex: 1; /* Ogni sezione prende metà della larghezza */
+        .right {
+            flex: 2; /* Ogni sezione prende metà della larghezza */
             display: flex;
-            margin-bottom: 50px; /* Distanza dal footer/banner inferiore */
-            margin-top: 50px;
+            margin-bottom: 5px; /* Distanza dal footer/banner inferiore */
+            margin-top: 10px;
             margin-left: 50px;
-            padding: 20px;
-
+            padding: 5px;
+            flex-direction: column;
         }
-
         .left {
             background-color: #eafafd;
+            flex: 1; /* Ogni sezione prende metà della larghezza */
+            display: flex;
+            margin-bottom: 10px; /* Distanza dal footer/banner inferiore */
+            margin-top: 20px;
+            margin-left: 50px;
+            padding: 20px;
+            flex-direction: column;
         }
 
         div.box {
             width:800px; height:450px;
             padding:1px 0;
-            font-size:20px
+            font-size:20px;
+            flex: 1;
+            border: 2px solid #ccc; /* Aggiunge un bordo grigio */
+            border-radius: 5px; /* Arrotonda leggermente gli angoli */
+            box-shadow: 0 7px 7px rgba(0, 0, 0, 0.1); /* Aggiunge una leggera ombra */
         }
 
         div.box-inner {
-            height: 400px; width:700px;
+            height: 450px; width:800px;
             overflow:auto;
             padding-right:2px
             }
+
+        .add-product-button {
+    text-align: center; /* Centra il bottone orizzontalmente */
+    margin-top: 20px; /* Spazio sopra il bottone */
+}
+
+.add-product-button button {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-product-button button:hover {
+    background-color: #ddd;
+}
     </style>
 {% endblock %}
 
 {% block content %}
+
 <header class="bg-dark py-1">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Profilo</h1>
+            <h1 class="display-4 fw-bolder">Profilo di <strong>{{ user }}</strong></h1>
         </div>
     </div>
 </header>
@@ -87,6 +115,11 @@
                     <li>Nessun prodotto disponibile per questo fornitore.</li>
                 {% endfor %}
         </div>
+        </div>
+        <div class="add-product-button">
+            <a href="{% url 'account:addproduct' %}">
+                <button>Aggiungi un prodotto</button>
+            </a>
         </div>
     </div>
 </div>

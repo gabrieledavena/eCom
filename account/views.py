@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from .forms import UserRegistrationForm, CustomerProfileForm
+from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
 from .models import Supplier 
 from store.models import Customer, User, Prodotto
 # Create your views here.
@@ -62,3 +62,21 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
         # Ottieni tutti i prodotti associati al fornitore corrente
         context['products'] = Prodotto.objects.filter(supplier=self.object)
         return context
+
+def addproduct(request):  # Assicurati che sia 'supplier_id'
+    # Cerca il fornitore con il supplier_id e verificane la proprietà
+
+    supplier = Supplier.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.supplier = supplier  # Associa il prodotto al fornitore
+            product.save()
+            messages.success(request, "Prodotto aggiunto con successo!")
+            return redirect('account:supplierprofile', pk=supplier.pk)  # Reindirizza al profilo fornitore
+    else:
+        form = ProductForm()
+
+    return render(request, 'account/add_product.html', {'form': form, 'supplier': supplier})

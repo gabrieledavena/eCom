@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+
+from store.models import Prodotto
 from .models import Supplier, Customer
 from django.contrib.auth.forms import UserChangeForm
 
@@ -23,3 +25,7 @@ class SupplierProfileForm(forms.ModelForm):
         model = Supplier
         fields = []
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Prodotto
+        fields = ['nome', 'price', 'image', 'category', 'description']
