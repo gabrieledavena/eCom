@@ -1,5 +1,6 @@
 from itertools import product
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
 #Per il carrello
@@ -18,6 +19,7 @@ def cart_page(request):
     totals = cart.total()
     return render(request, "cart/cart_page.html", {'products': products, 'totals': totals})
 
+@login_required
 def cart_add(request):
     cart = Cart(request)
     #testo per POST
