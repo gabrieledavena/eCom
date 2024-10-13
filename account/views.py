@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import UserRegistrationForm, CustomerProfileForm
 from .models import Supplier 
-from store.models import Customer, User
+from store.models import Customer, User, Prodotto
 # Create your views here.
 from django.contrib import messages
 from django.views.generic import UpdateView, DetailView
@@ -49,3 +49,16 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
 class CustomerProfileView(LoginRequiredMixin, DetailView):
     model = Customer
     template_name = 'account/customerprofile.html'
+
+class SupplierProfileView(LoginRequiredMixin, DetailView):
+    model = Supplier
+    template_name = 'account/supplierprofile.html'
+
+    context_object_name = 'supplier'  # Per riferirsi al fornitore nel template
+
+    # Sovrascrivi il metodo per aggiungere i prodotti al contesto
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Ottieni tutti i prodotti associati al fornitore corrente
+        context['products'] = Prodotto.objects.filter(supplier=self.object)
+        return context

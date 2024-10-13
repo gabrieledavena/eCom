@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block head_plug %}
+<style>
+        body{
+            font-family: Arial, sans-serif;
+        }
+
+        .mycontainer {
+            display: flex;
+            gap: 70px;
+        }
+
+        .left, .right {
+            flex: 1; /* Ogni sezione prende metà della larghezza */
+            display: flex;
+            margin-bottom: 50px; /* Distanza dal footer/banner inferiore */
+            margin-top: 50px;
+            margin-left: 50px;
+            padding: 20px;
+
+        }
+
+        .left {
+            background-color: #eafafd;
+        }
+
+        div.box {
+            width:800px; height:450px;
+            padding:1px 0;
+            font-size:20px
+        }
+
+        div.box-inner {
+            height: 400px; width:700px;
+            overflow:auto;
+            padding-right:2px
+            }
+    </style>
+{% endblock %}
+
+{% block content %}
+<header class="bg-dark py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Profilo</h1>
+        </div>
+    </div>
+</header>
+
+<div class="mycontainer">
+        <div class="left">
+            <div class="card-body">
+                <div style="text-align: center;">
+                <h3 class="card-title">  title  </h3>
+                    <br>
+                </div>
+            </div>
+
+        </div>
+
+    <div class="right">
+
+        <br><br>
+
+        <div class="box">
+        <div class="box-inner">
+
+            {% for product in products %}
+                <div class="card mb-1" >
+                    <div class="row g-0">
+                      <div class="col-md-2">
+                        <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="...">
+                      </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                            <div style="text-align: center;">
+                            <h5 class="card-title">{{product.nome}}</h5>
+                            <p class="card-text">{{product.description}}</p>
+
+                            <p class="card-text">€ {{product.price}}</p>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% empty %}
+                    <li>Nessun prodotto disponibile per questo fornitore.</li>
+                {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<ul>
+
+</ul>
+
+
+
+{% endblock %}
