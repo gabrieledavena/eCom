@@ -121,10 +121,11 @@
                                     <h5 class="card-title">{{product.nome}}</h5>
                                     <p class="card-text">{{product.description}}</p>
                                     <p class="card-text">€ {{product.price}}</p>
-                                </div></div>
-
-
+                                </div>
                             </div>
+
+
+                        </div>
                         <div class="col-md-2 text-end">
                                 <br>
                                     <form action="{% url 'account:deleteproduct' product.id %}" method="POST" style="display: inline;">
@@ -133,12 +134,12 @@
                                         <i class="fas fa-trash"></i> <!-- Icona del cestino -->
                                         </button>
                                     </form>
-                                </div>
+                        </div>
                     </div>
-                  </div>
-                {% empty %}
-                    <li>Nessun prodotto disponibile per questo fornitore.</li>
-                {% endfor %}
+                </div>
+            {% empty %}
+                <li>Nessun prodotto disponibile per questo fornitore.</li>
+            {% endfor %}
         </div>
         </div>
         <div class="add-product-button">

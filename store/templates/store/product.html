@@ -4,19 +4,19 @@
 
     <style>
     .like-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
 
-.like-btn i {
-    font-size: 30px; /* Regola la dimensione del cuore */
-}
+    .like-btn i {
+        font-size: 30px; /* Regola la dimensione del cuore */
+    }
 
-.like-btn i:hover {
-    opacity: 0.7; /* Aggiungi un effetto hover */
-}
+    .like-btn i:hover {
+        opacity: 0.7; /* Aggiungi un effetto hover */
+    }
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -44,20 +44,23 @@
 
           <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p>
 
+<div class="button-container" style="display: flex; justify-content: center; gap: 30px;">
+
           <button value="{{ product.id }}" class="btn btn-outline-dark" id="add-cart"> <i class="bi-cart-fill me-1"> Aggiungi al carrello </i></button>
 
                 <form action="{% url 'account:like' product.id %}" method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="like-btn">
-        {% if user in product.likes.all %}
-            <!-- Cuore pieno rosso -->
-            <i class="fas fa-heart" style="color: red;"></i>
-        {% else %}
-            <!-- Cuore vuoto con bordo rosso -->
-            <i class="far fa-heart" style="color: red;"></i>
-        {% endif %}
-    </button>
+                    <button type="submit" class="like-btn" >
+                        {% if user.customer in product.likes.all %}
+                            <!-- Cuore pieno rosso -->
+                            <i class="fas fa-heart" style="color: red;"></i>
+                        {% else %}
+                            <!-- Cuore vuoto con bordo rosso -->
+                            <i class="far fa-heart" style="color: red;"></i>
+                        {% endif %}
+                    </button>
                 </form>
+</div>
         </div>
         </div>
       </div>

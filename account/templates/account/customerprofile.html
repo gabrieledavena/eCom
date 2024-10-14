@@ -38,7 +38,24 @@
             overflow:auto;
             padding-right:2px
             }
+        .like-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .like-btn i {
+        font-size: 30px; /* Regola la dimensione del cuore */
+    }
+
+    .like-btn i:hover {
+        opacity: 0.7; /* Aggiungi un effetto hover */
+    }
+
     </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 {% endblock %}
 
 {% block content %}
@@ -64,14 +81,18 @@
 
         </div>
         <div class="right">
+        <!-- Sezione Destra -->
         <div class="box">
             <div class="box-inner">
                 {% for product in liked_products %}
                     <div class="card mb-1" >
                         <div class="row g-0">
-                          <div class="col-md-2">
-                            <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="...">
-                          </div>
+                             <!-- Foto -->
+                            <div class="col-md-2">
+                                <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="...">
+                            </div>
+
+                            <!-- Info -->
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <div style="text-align: center;">
@@ -81,6 +102,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Like -->
+                            <div class="col-md-2 text-end">
+                                <form action="{% url 'account:like' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                        <button type="submit" class="like-btn" >
+                                                <i class="fas fa-heart" style="color: red;"></i>
+                                        </button>
+                                </form>
+                            </div>
+                            <!--Fine like-->
+
                         </div>
                     </div>
                 {% empty %}
@@ -89,6 +122,8 @@
             </div>
         </div>
         </div>
+        <!-- Fine sezione destra -->
+
 </div>
 
 
