@@ -1,3 +1,5 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
@@ -9,7 +11,7 @@ from .models import Supplier
 from store.models import Customer, User, Prodotto
 # Create your views here.
 from django.contrib import messages
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView, TemplateView
 
 
 def register(request):
@@ -46,9 +48,14 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
         pk = self.get_context_data()["object"].pk
         return reverse('store:home_store')
 
-class CustomerProfileView(LoginRequiredMixin, DetailView):
-    model = Customer
+class CustomerProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'account/customerprofile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['customer']= self.request.user.customer
+        context['liked_products']=Prodotto.objects.filter(likes = self.request.user.customer)
+        return context
 
 class SupplierProfileView(LoginRequiredMixin, DetailView):
     model = Supplier
@@ -90,3 +97,17 @@ def delete_product(request, pk):
         messages.success(request, "Prodotto eliminato con successo!")
         return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore
     return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore
+
+
+def like(request, pk):
+    prodotto = get_object_or_404(Prodotto, id=pk)
+
+    # Controlla se l'utente ha già messo il like
+    if request.user.customer in prodotto.likes.all():
+        # Rimuove il like se già presente
+        prodotto.likes.remove(request.user.customer)
+    else:
+        # Aggiunge il like
+        prodotto.likes.add(request.user.customer)
+
+    return redirect('store:product', pk=pk)

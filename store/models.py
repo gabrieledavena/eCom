@@ -18,6 +18,8 @@ class Prodotto(models.Model):
     image = models.ImageField(upload_to='uploads/product', blank=True, default='uploads/product/stock_shoes.jpg')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
 
+    likes = models.ManyToManyField(Customer, related_name='liked', blank=True)
+
     def __str__(self):
         return self.nome
 

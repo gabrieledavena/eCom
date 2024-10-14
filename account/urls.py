@@ -16,6 +16,7 @@ urlpatterns = [
     path("Supplierprofile/<int:pk>/", SupplierProfileView.as_view(), name='supplierprofile'),
     path("addproduct/", addproduct, name='addproduct'),
     path("deleteproduct/<int:pk>", delete_product, name='deleteproduct'),
+    path("like/<int:pk>", like, name='like'),
 
     path("update_user/<int:pk>", CustomerUpdateView.as_view(), name= 'update_user'),
 ]
