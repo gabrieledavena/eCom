@@ -1,4 +1,3 @@
-from lib2to3.fixes.fix_input import context
 
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -8,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
 from .models import Supplier 
-from store.models import Customer, User, Prodotto
+from store.models import Customer, Prodotto
 # Create your views here.
 from django.contrib import messages
 from django.views.generic import UpdateView, DetailView, TemplateView
@@ -50,12 +49,15 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
 
 class CustomerProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'account/customerprofile.html'
+    context_object_name = 'customer'  # Per riferirsi al utente nel template
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['customer']= self.request.user.customer
         context['liked_products']=Prodotto.objects.filter(likes = self.request.user.customer)
         return context
+
+    #Dato che sto usando una template view non bisogno del dispatch per capire se il customer che sta cercando di accedere è lo stesso del profilo, dato che lo passo nel contesto
 
 class SupplierProfileView(LoginRequiredMixin, DetailView):
     model = Supplier
@@ -69,6 +71,14 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
         # Ottieni tutti i prodotti associati al fornitore corrente
         context['products'] = Prodotto.objects.filter(supplier=self.object)
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # Controlla se l'utente loggato è lo stesso associato al profilo del fornitore
+        supplier = self.get_object()  # Ottieni l'istanza del fornitore
+        if request.user != supplier.user:  # ForeignKey User in Supplier
+            messages.success(request,"Non hai il permesso di accedere a questo profilo")
+            return redirect('store:home_store')
+        return super().dispatch(request, *args, **kwargs)
 
 def addproduct(request):  # Assicurati che sia 'supplier_id'
     # Cerca il fornitore con il supplier_id e verificane la proprietà
@@ -98,7 +108,7 @@ def delete_product(request, pk):
         return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore
     return redirect('account:supplierprofile', pk=product.supplier.id)  # Reindirizza alla pagina del fornitore
 
-
+@login_required
 def like(request, pk):
     prodotto = get_object_or_404(Prodotto, id=pk)
 

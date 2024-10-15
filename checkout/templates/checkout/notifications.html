@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head_plug %}
+    <style>
+        .notification-container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .notification {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .notification.unread {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+
+        .notification.read {
+            background-color: #e9e9e9;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .mark-read-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .mark-read-btn:hover {
+            background-color: #218838;
+        }
+
+        .mark-read-btn i {
+            font-size: 18px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="notification-container">
+    <h2>Le tue notifiche</h2>
+
+    {% if notifications %}
+        {% for notification in notifications %}
+            <div class="notification {% if not notification.is_read %}unread{% else %}read{% endif %}">
+                <div class="notification-content">
+                    {{ notification.message }}
+                    <br>
+                    <small>{{ notification.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+
+                {% if not notification.is_read %}
+                    <form action="{% url 'checkout:mark_as_read' notification.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="mark-read-btn" title="Segna come letto">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Non ci sono notifiche disponibili.</p>
+    {% endif %}
+</div>
+{% endblock %}
