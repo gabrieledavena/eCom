@@ -71,6 +71,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
 
                 "cart.context_processors.cart",
+                "ecom.context_processors.notification_count",
             ],
         },
     },
