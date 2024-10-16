@@ -3,9 +3,6 @@ from itertools import product
 from store.models import Prodotto
 
 
-
-
-
 class Cart():
     def __init__(self, request):
         self.session = request.session
@@ -51,3 +48,24 @@ class Cart():
             total += product.price
         self.session.modified = True
         return total
+
+    def get_items_by_supplier(self, supplier):
+        items= []
+
+        for product in self.get_products():
+            if product.supplier == supplier:
+                items.append(product)
+        return items
+
+    def get_suppliers(self):
+        suppliers = set()
+
+        for product in self.get_products():
+            suppliers.add(product.supplier)
+
+        return list(suppliers)
+
+    def clear(self):
+        """Svuota completamente il carrello."""
+        self.session['session_key'] = {}
+        self.session.modified = True
