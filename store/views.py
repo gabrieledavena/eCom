@@ -17,7 +17,7 @@ def category(request, cat):
     return render(request, 'store/category.html', {'products':products, 'category':myCategory})
 
 def home_store(request):
-    products=Prodotto.objects.all()
+    products=Prodotto.objects.all().filter(is_sold=False)
     if request.user.is_authenticated:
         unread_notifications_count = request.user.notifications.filter(is_read=False).count()
     else:

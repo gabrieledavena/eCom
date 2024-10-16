@@ -17,6 +17,7 @@ class Prodotto(models.Model):
     description =models.CharField( max_length=200, blank=True)
     image = models.ImageField(upload_to='uploads/product', blank=True, default='uploads/product/stock_shoes.jpg')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    is_sold=models.BooleanField(default=False)
 
     likes = models.ManyToManyField(Customer, related_name='liked', blank=True)
 

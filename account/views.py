@@ -54,7 +54,7 @@ class CustomerProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['customer']= self.request.user.customer
-        context['liked_products']=Prodotto.objects.filter(likes = self.request.user.customer)
+        context['liked_products']=Prodotto.objects.filter(likes = self.request.user.customer).filter(is_sold=False)
         return context
 
     #Dato che sto usando una template view non bisogno del dispatch per capire se il customer che sta cercando di accedere è lo stesso del profilo, dato che lo passo nel contesto
@@ -69,7 +69,7 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Ottieni tutti i prodotti associati al fornitore corrente
-        context['products'] = Prodotto.objects.filter(supplier=self.object)
+        context['products'] = Prodotto.objects.filter(supplier=self.object).filter(is_sold=False)
         return context
 
     def dispatch(self, request, *args, **kwargs):

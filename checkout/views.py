@@ -21,6 +21,7 @@ def mark_as_read(request, notification_id):
     notification.save()
     return redirect('checkout:notification_list')
 
+@login_required
 def checkout(request):
     cart = Cart(request)
     suppliers = cart.get_suppliers()
@@ -37,4 +38,29 @@ def checkout(request):
 
     #cancello il carrello
     cart.clear()
+    return redirect('store:home_store')
+
+def accept_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    for item in order.items.all():
+        if (item.prodotto.is_sold):
+            Notification.objects.create(recipient=order.customer.user, message=f"Impossibile continuare con l'ordine in quanto uno o più prodotti sono già stati venduti")
+            reject_order(request, order_id)
+        item.prodotto.is_sold=True
+        item.prodotto.save()
+        item.save()
+    Notification.objects.create(recipient=request.user,message=f"Hai accettato l'ordine {order.id}")
+    Notification.objects.create(recipient=order.customer.user,message=f"{order.supplier} ha accettato l'ordine {order.id}")
+    order.status = "ACCEPTED"
+    order.save()
+
+    return redirect('store:home_store')
+
+def reject_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    Notification.objects.create(recipient=request.user,message=f"Hai rifiutato l'ordine {order.id}")
+    Notification.objects.create(recipient=order.customer.user,message=f"{order.supplier} ha rifiutato l'ordine {order.id}")
+    order.delete()
+
     return redirect('store:home_store')
