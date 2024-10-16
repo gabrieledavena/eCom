@@ -25,9 +25,9 @@
             border: 1px solid black;
             border-radius: 15px;
             margin: 6px;
-            max-height: 125px;
         }
     </style>
+
 {% endblock %}
 {%block content %}
         <!-- Header-->
@@ -101,6 +101,19 @@
             <div style="text-align: center;">
             <h1>Resoconto </h1>
                 Totale : €{{totals}}
+            <hr>
+                {{ request.user.customer.nome }} {{ request.user.customer.cognome }} <br>
+                {{ request.user.customer.email }} <br>
+
+                <strong>Indirizzo:</strong><a href="{% url "account:update_user" request.user.customer.id %}"> {{ request.user.customer.indirizzo }}</a> <br>
+
+                <br>
+                <br>
+                <form action="{% url 'checkout:checkout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-dark" >Procedi al pagamento</button>
+                </form>
+
             </div>
         </div>
 

@@ -24,7 +24,6 @@ class Order(models.Model):
     class OrderStatus(models.TextChoices):
         PENDING='PENDING'
         ACCEPTED='ACCEPTED'
-        REJECTED='REJECTED'
         COMPLETED='COMPLETED'
 
     status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.PENDING, max_length=20)

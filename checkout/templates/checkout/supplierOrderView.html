@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block head_plug %}
+    <style>
+        .body-ins {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: block;
+        }
+        .toggle-dropdown {
+            margin-bottom: 20px;
+        }
+        .toggle-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            text-align: left;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .toggle-content {
+            display: none; /* Inizialmente nascosto */
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .card {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            height: 300px;
+        }
+        .info-section {
+            flex: 1;
+            margin-bottom: 10px;
+        }
+        .scrollable-section {
+            flex: 2; /* 2/4 per la sezione scrollabile */
+            overflow-x: auto; /* Abilita lo scroll orizzontale */
+            white-space: nowrap; /* Impedisce il wrapping del contenuto */
+            margin-bottom: 10px;
+        }
+        .square-card {
+            display: inline-block; /* Permette la disposizione in linea */
+            width: 250px; /* Dimensione quadrata */
+            height: 250px; /* Dimensione quadrata */
+            margin-right: 10px; /* Margine tra le card */
+            background-color: #e9ecef; /* Sfondo delle card */
+            border: 1px solid #ced4da; /* Bordo delle card */
+            border-radius: 5px; /* Bordo arrotondato */
+            text-align: center; /* Centratura del testo */
+        }
+        .button-section {
+            flex: 1; /* 1/4 vuoto */
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Disposizione verticale */
+            align-items: center;    /* Allinea i bottoni al centro */
+            margin-top: 50px;      /* Margine superiore */
+        }
+        .button {
+            background-color: #4CAF50; /* Verde */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0; /* Margine verticale tra i bottoni */
+            cursor: pointer;
+            border-radius: 5px; /* Raggio angolo */
+        }
+        .button.reject {
+            background-color: #f44336; /* Rosso */
+        }
+    </style>
+
+    <script>
+    function toggleDropdown(contentId) {
+        const content = document.getElementById(contentId);
+        // Togglia la visibilità del contenuto
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block"; // Mostra il contenuto
+        } else {
+            content.style.display = "none"; // Nascondi il contenuto
+        }
+    }
+</script>
+{% endblock %}
+
+
+<!-- BANNER -->
+{% block banner %}
+<header class="bg-dark py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Gestione ordini di <strong>{{ user }}</strong></h1>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div  class="body-ins">
+    <br>
+    <!-- PER IL PENDING ORDER-->
+<div class="toggle-dropdown">
+    <button class="toggle-header" onclick="toggleDropdown('pendingContent')">Pending</button>
+    <div class="toggle-content" id="pendingContent">
+        {% for pending in pending_orders %}
+        <div class="card">
+
+            <div class="info-section">
+                <h4>Ordine {{ pending.id }}</h4>
+                <p>Da: {{ pending.customer.nome }} {{ pending.customer.cognome }}</p>
+                <p>email: {{ pending.customer.email }}</p>
+                <p>Indirizzo: {{ pending.customer.indirizzo }}</p>
+            </div>
+
+            <div class="scrollable-section">
+                    {% for item in pending.items.all %}
+                        <div class="square-card">
+
+                        <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                            <br>
+                        <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
+                            <br>
+                        €{{ item.prodotto.price }}
+
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <div class="button-section">
+                <br><br>
+                <div style="text-align: center;"><strong>Totale: €{{ pending.get_total }}</strong></div>
+                <div class="button-container">
+                    <form method="POST" action="{% url 'checkout:accept_order' pending.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button">Accetta</button>
+                    </form>
+                    <form method="POST" action="{% url 'checkout:reject_order' pending.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button reject">Rifiuta</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <!-- ACCEPTED -->
+<div class="toggle-dropdown">
+    <button class="toggle-header" onclick="toggleDropdown('acceptedContent')">Accepted</button>
+    <div class="toggle-content" id="acceptedContent">
+        <div class="card">
+
+            <div class="info-section">
+            <h4>Ordine #3</h4>
+            <p>Dettagli dell'ordine accettato.</p>
+            </div>
+
+            <div class="scrollable-section">
+                    <div class="square-card">Card 1</div>
+                    <div class="square-card">Card 2</div>
+                    <div class="square-card">Card 3</div>
+                    <div class="square-card">Card 4</div>
+                    <div class="square-card">Card 5</div>
+                    <div class="square-card">Card 6</div>
+            </div>
+
+            <div class="empty-section"></div>
+
+        </div>
+    </div>
+</div>
+
+    <!-- COMPLETED -->
+<div class="toggle-dropdown">
+    <button class="toggle-header" onclick="toggleDropdown('completedContent')">Completed</button>
+    <div class="toggle-content" id="completedContent">
+        <div class="card">
+            <h4>Ordine #4</h4>
+            <p>Dettagli dell'ordine completato.</p>
+        </div>
+        <div class="card">
+            <h4>Ordine #5</h4>
+            <p>Dettagli dell'ordine completato.</p>
+        </div>
+    </div>
+</div></div>
+
+{% endblock %}

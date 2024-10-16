@@ -1,8 +1,11 @@
 from itertools import product
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import TemplateView
 
+from account.models import Supplier
 from cart.cart import Cart
 from checkout.models import Notification, Order, OrderItem
 
@@ -64,3 +67,20 @@ def reject_order(request, order_id):
     order.delete()
 
     return redirect('store:home_store')
+
+class SupplierOrderView(LoginRequiredMixin, TemplateView):
+    template_name = "checkout/supplierOrderView.html"
+    model = Supplier
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Recupera gli ordini dell'utente
+        pending_orders = self.request.user.supplier.orders.filter(status='PENDING')
+        accepted_orders = self.request.user.supplier.orders.filter(status='ACCEPTED')
+        competed_orders = self.request.user.supplier.orders.filter(status='COMPETED')
+
+        # Aggiungi gli ordini al contesto con i relativi items
+        context['pending_orders'] = pending_orders.prefetch_related('items')  # Usa prefetch_related
+        context['accepted_orders'] = accepted_orders.prefetch_related('items')
+        context['competed_orders'] = competed_orders.prefetch_related('items')
+
+        return context
