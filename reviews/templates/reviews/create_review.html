@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block head_plug %}
+    <!-- Aggiungi Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Inserisci qui il CSS aggiornato come descritto sopra */
+        .rating {
+            direction: rtl; /* Per ordinare le stelle da destra a sinistra */
+            display: inline-flex;
+            justify-content: flex-end;
+        }
+        .rating input {
+            display: none; /* Nascondi i radio button */
+        }
+        .rating label {
+            font-size: 2rem; /* Dimensione delle stelle */
+            color: #ddd; /* Colore delle stelle non selezionate */
+            cursor: pointer;
+            transition: color 0.2s; /* Aggiunge una transizione fluida */
+        }
+        .rating input:checked ~ label {
+            color: #f5c518; /* Colore delle stelle selezionate */
+        }
+        .rating input:hover ~ label,
+        .rating input:hover {
+            color: #f5c518; /* Colore delle stelle selezionate durante hover */
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f5c518; /* Colore delle stelle durante hover */
+        }
+    </style>
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+
+                <div class="card-body">
+                    <div style="text-align: center; font-size: 2rem" >
+                        <strong >{{ order.supplier | upper }}</strong>
+                        <p> {{ order.items.count|pluralize:"È stato comprato,Sono stati comprati" }} {{ order.items.count }} {{ order.items.count|pluralize:"prodotto,prodotti" }}</p>
+                    </div>
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Campo per il punteggio -->
+                        <div class="mb-3">
+                                <div style="text-align: center;">
+                                <div class="rating" style="text-align: center">
+                                    {% for i in "54321" %}
+                                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                                         <label for="star{{ i }}" class="star">&#9733;</label>
+                                    {% endfor %}
+                                </div>
+                                </div>
+                        </div>
+
+                        <!-- Campo per il commento -->
+                        <div class="mb-3" style="text-align :center">
+                            {{ form.comment }}
+                        </div>
+
+                        <!-- Pulsante di invio -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Invia recensione</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}
