@@ -6,9 +6,10 @@ app_name = 'checkout'
 urlpatterns = [
     path("", checkout, name="checkout"),
 
-    path("supplierorderview", SupplierOrderView.as_view(), name="supplierorderview"),
+    path("supplierorderview/", SupplierOrderView.as_view(), name="supplierorderview"),
     path("accept_order/<int:order_id>", accept_order, name="accept_order"),
     path("reject_order/<int:order_id>", reject_order, name="reject_order"),
+    path("ship_order/<int:order_id>", ship_order, name="ship_order"),
 
 
     path("notification/", notification_list, name="notification_list"),

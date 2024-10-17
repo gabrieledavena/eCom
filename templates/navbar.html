@@ -62,7 +62,12 @@
                 </a>
                 </form>
             {% endif %}
-
+            
+            <!-- Ordini-->
+            {% if user.is_staff %}
+                <a class="fas fa-box" href="{% url "checkout:supplierorderview" %}"> </a>
+            {% endif %}
+        
             {% if user.is_authenticated %}
 
                 <form action="{% url 'account:logout' %}" method="post" style="display: inline;">

@@ -1,10 +1,11 @@
 from itertools import product
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
-
+from django.utils import timezone
 from account.models import Supplier
 from cart.cart import Cart
 from checkout.models import Notification, Order, OrderItem
@@ -43,6 +44,7 @@ def checkout(request):
     cart.clear()
     return redirect('store:home_store')
 
+@staff_member_required
 def accept_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     for item in order.items.all():
@@ -57,8 +59,9 @@ def accept_order(request, order_id):
     order.status = "ACCEPTED"
     order.save()
 
-    return redirect('store:home_store')
+    return redirect('checkout:supplierorderview')
 
+@staff_member_required
 def reject_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
@@ -66,21 +69,40 @@ def reject_order(request, order_id):
     Notification.objects.create(recipient=order.customer.user,message=f"{order.supplier} ha rifiutato l'ordine {order.id}")
     order.delete()
 
-    return redirect('store:home_store')
+    return redirect('checkout:supplierorderview')
 
-class SupplierOrderView(LoginRequiredMixin, TemplateView):
+@staff_member_required
+def ship_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.status = "TRANSITING"
+    order.shipped_at = timezone.now()
+    order.save()
+
+    Notification.objects.create(recipient=request.user, message=f"Hai spedito l'ordine {order.id}")
+    Notification.objects.create(recipient=order.customer.user,message=f"{order.supplier} ha spedito l'ordine {order.id}")
+
+    return redirect('checkout:supplierorderview')
+
+
+class SupplierOrderView(UserPassesTestMixin, TemplateView):
     template_name = "checkout/supplierOrderView.html"
     model = Supplier
+
+    def test_func(self):
+        return self.request.user.is_staff
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Recupera gli ordini dell'utente
         pending_orders = self.request.user.supplier.orders.filter(status='PENDING')
         accepted_orders = self.request.user.supplier.orders.filter(status='ACCEPTED')
-        competed_orders = self.request.user.supplier.orders.filter(status='COMPETED')
+        completed_orders = self.request.user.supplier.orders.filter(status='COMPETED')
+        transiting_orders = self.request.user.supplier.orders.filter(status='TRANSITING')
 
         # Aggiungi gli ordini al contesto con i relativi items
         context['pending_orders'] = pending_orders.prefetch_related('items')  # Usa prefetch_related
         context['accepted_orders'] = accepted_orders.prefetch_related('items')
-        context['competed_orders'] = competed_orders.prefetch_related('items')
+        context['competed_orders'] = completed_orders.prefetch_related('items')
+        context['transiting_orders'] = transiting_orders.prefetch_related('items')
 
         return context

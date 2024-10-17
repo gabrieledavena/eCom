@@ -113,9 +113,10 @@
 {% block content %}
 <div  class="body-ins">
     <br>
+
     <!-- PER IL PENDING ORDER-->
 <div class="toggle-dropdown">
-    <button class="toggle-header" onclick="toggleDropdown('pendingContent')">Pending</button>
+    <button class="toggle-header" onclick="toggleDropdown('pendingContent')">Richieste ({{ pending_orders.count }})</button>
     <div class="toggle-content" id="pendingContent">
         {% for pending in pending_orders %}
         <div class="card">
@@ -125,6 +126,7 @@
                 <p>Da: {{ pending.customer.nome }} {{ pending.customer.cognome }}</p>
                 <p>email: {{ pending.customer.email }}</p>
                 <p>Indirizzo: {{ pending.customer.indirizzo }}</p>
+                <p>Creato il: {{ pending.created_at }}</p>
             </div>
 
             <div class="scrollable-section">
@@ -161,29 +163,84 @@
     </div>
 </div>
 
+
     <!-- ACCEPTED -->
 <div class="toggle-dropdown">
-    <button class="toggle-header" onclick="toggleDropdown('acceptedContent')">Accepted</button>
+    <button class="toggle-header" onclick="toggleDropdown('acceptedContent')"> Pagato ({{ accepted_orders.count }})</button>
     <div class="toggle-content" id="acceptedContent">
+        {% for accepted in accepted_orders %}
         <div class="card">
-
             <div class="info-section">
-            <h4>Ordine #3</h4>
-            <p>Dettagli dell'ordine accettato.</p>
+                <h4>Ordine {{ accepted.id }}</h4>
+                <p>Da: {{ accepted.customer.nome }} {{ accepted.customer.cognome }}</p>
+                <p>email: {{ accepted.customer.email }}</p>
+                <p>Indirizzo: {{ accepted.customer.indirizzo }}</p>
+                <p>Creato il: {{ accepted.created_at }}</p>
             </div>
 
             <div class="scrollable-section">
-                    <div class="square-card">Card 1</div>
-                    <div class="square-card">Card 2</div>
-                    <div class="square-card">Card 3</div>
-                    <div class="square-card">Card 4</div>
-                    <div class="square-card">Card 5</div>
-                    <div class="square-card">Card 6</div>
+                    {% for item in accepted.items.all %}
+                        <div class="square-card">
+
+                        <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                            <br>
+                        <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
+                            <br>
+                        €{{ item.prodotto.price }}
+
+                        </div>
+                    {% endfor %}
             </div>
 
-            <div class="empty-section"></div>
+            <div class="button-section">
+                <br><br>
+                <div style="text-align: center;"><strong>Totale: €{{ accepted.get_total }}</strong></div>
+                <form method="POST" action="{% url 'checkout:ship_order' accepted.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="button reject">Spedisci</button>
+                    </form>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-        </div>
+<!-- TRANSIT -->
+<div class="toggle-dropdown">
+    <button class="toggle-header" onclick="toggleDropdown('transitContent')">In transito ({{ transiting_orders.count }})</button>
+    <div class="toggle-content" id="transitContent">
+        {% for transiting in transiting_orders %}
+        <div class="card">
+            <div class="info-section">
+                <h4>Ordine {{ transiting.id }}</h4>
+                <p>Da: {{ transiting.customer.nome }} {{ transiting.customer.cognome }}</p>
+                <p>email: {{ transiting.customer.email }}</p>
+                <p>Indirizzo: {{ transiting.customer.indirizzo }}</p>
+                <p>Creato il: {{ transiting.created_at }}</p>
+            </div>
+
+            <div class="scrollable-section">
+                    {% for item in transiting.items.all %}
+                        <div class="square-card">
+
+                        <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                            <br>
+                        <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
+                            <br>
+                        €{{ item.prodotto.price }}
+
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <div class="button-section">
+                <br><br>
+                <div style="text-align: center;"><strong>Totale: €{{ transiting.get_total }}</strong></div>
+                <div style="text-align: center;"><strong>Spedito il: {{ transiting.shipped_at }}</strong></div>
+
+            </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

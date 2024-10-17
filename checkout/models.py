@@ -20,10 +20,12 @@ class Order(models.Model):
     customer=models.ForeignKey(Customer,on_delete=models.CASCADE, related_name='orders')
     created_at=models.DateTimeField(auto_now_add=True)
     supplier=models.ForeignKey(Supplier,on_delete=models.CASCADE, related_name='orders')
+    shipped_at=models.DateTimeField(blank=True, null=True)
 
     class OrderStatus(models.TextChoices):
         PENDING='PENDING'
         ACCEPTED='ACCEPTED'
+        TRANSITING ='TRANSITING'
         COMPLETED='COMPLETED'
 
     status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.PENDING, max_length=20)
