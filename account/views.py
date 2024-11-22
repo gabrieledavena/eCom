@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 
 from checkout.models import Order
+from reviews.models import Review
 from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
 from .models import Supplier 
 from store.models import Customer, Prodotto
@@ -75,6 +76,21 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # Ottieni tutti i prodotti associati al fornitore corrente
         context['products'] = Prodotto.objects.filter(supplier=self.object).filter(is_sold=False)
+        context['reviews'] =Review.objects.filter(supplier=self.object)
+
+        # Per la media stelle
+        average=0
+        for review in Review.objects.filter(supplier=self.object):
+            average= average + review.rating
+        average = average/len(Review.objects.filter(supplier=self.object))
+        halfstar=0
+        context['average'] = int (average)
+        if average % 1 >= 0.3 :
+            halfstar = 1
+            context['halfstar'] = halfstar
+        context['empty']= 5 -halfstar - int (average)
+
+
         return context
 
     def dispatch(self, request, *args, **kwargs):

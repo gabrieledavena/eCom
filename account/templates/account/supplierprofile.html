@@ -46,6 +46,12 @@
             overflow:auto;
             padding-right:2px
             }
+        div.box-inner_review {
+            display: compact;
+            height: 450px;
+            overflow:auto;
+            padding-right:2px
+            }
 
         .add-product-button {
             text-align: center; /* Centra il bottone orizzontalmente */
@@ -93,15 +99,56 @@
 {% block content %}
 <div class="mycontainer">
         <div class="left">
+        <div style="text-align: center; font-size: x-large" >
+        <strong>RECENSIONI</strong></div>
+        <div class="box-inner_review">
+
             <div class="card-body">
                 <div style="text-align: center;">
-                <h3 class="card-title">  title  </h3>
-                    <br>
+                    {% for review in reviews %}
+
+                        <div class="card">
+                            <br>
+                            <h3>{{ review.customer.nome }} {{ review.customer.cognome }}</h3>
+                            <!-- Visualizzazione delle stelle per il voto della singola recensione -->
+                            <span>
+                                {% for i in "12345" %}
+                                    {% if i <= review.rating|floatformat %}
+                                        <i class="fas fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% else %}
+                                        <i class="far fa-star text-warning"></i> <!-- Stella vuota -->
+                                    {% endif %}
+                                {% endfor %}
+                            </span><br>
+                            <p> {{ review.comment }}</p>
+                        </div>
+                    {% empty %}
+                        <p>Non ci sono recensioni per questo prodotto.</p>
+                    {% endfor %}
                 </div>
             </div>
-
         </div>
+        <br>
+        <div style="text-align: center;">
 
+         MEDIA:
+        <span>
+                                {% for i in "12345" %}
+                                    {% if i <= average|floatformat %}
+                                        <i class="fas fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% endif %}
+                                {% endfor %}
+                                {% if halfstar == 1 %}
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                                {% endif %}
+                                {% for i in "12345" %}
+                                    {% if i <= empty|floatformat %}
+                                        <i class="far fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% endif %}
+                                {% endfor %}
+                            </span><br>
+        </div>
+        </div>
     <div class="right">
 
         <br><br>
