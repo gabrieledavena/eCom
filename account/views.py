@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+
+from checkout.models import Order
 from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
 from .models import Supplier 
 from store.models import Customer, Prodotto
@@ -55,6 +57,9 @@ class CustomerProfileView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['customer']= self.request.user.customer
         context['liked_products']=Prodotto.objects.filter(likes = self.request.user.customer).filter(is_sold=False)
+        transiting_orders = self.request.user.customer.orders.filter(status="TRANSITING")
+        context['transiting_orders'] = transiting_orders.prefetch_related('items')
+
         return context
 
     #Dato che sto usando una template view non bisogno del dispatch per capire se il customer che sta cercando di accedere è lo stesso del profilo, dato che lo passo nel contesto

@@ -32,17 +32,41 @@
             border-radius: 5px; /* Arrotonda leggermente gli angoli */
             box-shadow: 0 7px 7px rgba(0, 0, 0, 0.1); /* Aggiunge una leggera ombra */
         }
+        div.box_order {
+            padding:1px 0;
+            font-size:20px;
+            flex: 1;
+            border: 2px solid #ccc; /* Aggiunge un bordo grigio */
+            border-radius: 5px; /* Arrotonda leggermente gli angoli */
+            box-shadow: 0 7px 7px rgba(0, 0, 0, 0.1); /* Aggiunge una leggera ombra */
+        }
 
         div.box-inner {
             height: 450px; width:800px;
             overflow:auto;
             padding-right:2px
             }
+        div.box-inner_order {
+            overflow:auto;
+            padding-right:2px
+            }
+        .scrollable-section {
+            flex: 2; /* 2/4 per la sezione scrollabile */
+            overflow-x: auto; /* Abilita lo scroll orizzontale */
+            white-space: nowrap; /* Impedisce il wrapping del contenuto */
+            margin-bottom: 10px;
+            margin-left: 200px;
+            margin-right: 100px;
+
+        }
         .like-btn {
         background: none;
         border: none;
         padding: 0;
         cursor: pointer;
+        position: absolute;
+            top: 10px; /* Distanza dal bordo superiore della card */
+        right: 10px;
     }
 
     .like-btn i {
@@ -52,11 +76,65 @@
     .like-btn i:hover {
         opacity: 0.7; /* Aggiungi un effetto hover */
     }
+    .card {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            height: 300px;
+        }
+    .square-card {
+            display: inline-block; /* Permette la disposizione in linea */
+            width: 250px; /* Dimensione quadrata */
+            height: 250px; /* Dimensione quadrata */
+            margin-right: 10px; /* Margine tra le card */
+            background-color: #e9ecef; /* Sfondo delle card */
+            border: 1px solid #ced4da; /* Bordo delle card */
+            border-radius: 5px; /* Bordo arrotondato */
+            text-align: center; /* Centratura del testo */
+        }
+
+    /* Imposta altezza massima per la riga */
+    .card.mb-1{
+        max-height: 150px;
+        overflow: hidden; /* Nasconde contenuto in eccesso */
+    }
+    .btn-primary {
+            background-color: #4CAF50; /* Verde */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0; /* Margine verticale tra i bottoni */
+            cursor: pointer;
+            border-radius: 5px; /* Raggio angolo */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
 
     </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
 
 {% block content %}
 <header class="bg-dark py-1">
@@ -122,11 +200,44 @@
             </div>
         </div>
         </div>
-        <!-- Fine sezione destra -->
 
 </div>
+    <!-- fine sezione alta -->
 
+    <!-- ORDINI -->
+    <div class="box_order">
+    <div style="text-align: center;">
+    <strong>ORDINI IN TRANSITO</strong>
+    </div>
+            <div class="box-inner_order">
+                {% for transiting in transiting_orders %}
+                   <div class="card">
+                        <div class="info-section">
+                            <h4>Ordine {{ transiting.id }}</h4>
+                            <p>Venditore: {{ transiting.supplier.user }} </p>
+                            <p>Creato il: {{ transiting.created_at }}</p>
+                        </div>
 
+                        <div class="scrollable-section">
+                                {% for item in transiting.items.all %}
+                                    <div class="square-card">
+
+                                    <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                                        <br>
+                                    <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
+                                        <br>
+                                    €{{ item.prodotto.price }}
+
+                                    </div>
+                                {% endfor %}
+                        </div>
+                        <div><a href="{% url 'reviews:create_review' transiting.id  %}" class="btn btn-primary">Conferma Ritiro</a></div>
+
+                   </div>
+                {% endfor %}
+
+            </div>
+    </div>
 
 
 

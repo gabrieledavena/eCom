@@ -15,6 +15,8 @@ def create_review(request, order_id):
             review.customer = request.user.customer
             review.supplier = order.supplier
             review.save()
+            order.status='COMPLETED'
+            order.save()
             return redirect("store:home_store")
     else:
         form = ReviewForm()
