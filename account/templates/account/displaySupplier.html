@@ -27,6 +27,7 @@
             padding:5px;
             }
 
+
  </style>
 {% endblock %}
 
@@ -44,6 +45,23 @@
         <!-- Section-->
         <section class="py-1">
             <div class="left">
+            <form method="GET" action="">
+               <label for="order_by">Ordina per:</label>
+                <select name="order_by" id="order_by" onchange="this.form.submit()">
+                    <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>
+                        Prezzo: crescente
+                    </option>
+                    <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>
+                        Prezzo: decrescente
+                    </option>
+                    <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>
+                        Nome: A-Z
+                    </option>
+                    <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>
+                        Nome: Z-A
+                    </option>
+                </select>
+            </form>
                 <div class="container px-4 px-lg-5 mt-5">
                     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 

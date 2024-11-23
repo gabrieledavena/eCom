@@ -17,7 +17,21 @@ def category(request, cat):
     return render(request, 'store/category.html', {'products':products, 'category':myCategory})
 
 def home_store(request):
-    products=Prodotto.objects.all().filter(is_sold=False)
+    order_by = request.GET.get('order_by', 'price_asc')
+
+    # Ordina i prodotti in base alla selezione
+    if order_by == 'price_asc':
+        products = Prodotto.objects.filter(is_sold=False).order_by(
+            'price')  # Prezzo crescente
+    elif order_by == 'price_desc':
+        products = Prodotto.objects.filter(is_sold=False).order_by(
+            '-price')  # Prezzo decrescente
+    elif order_by == 'name_asc':
+        products = Prodotto.objects.filter(is_sold=False).order_by('nome')  # Nome A-Z
+    elif order_by == 'name_desc':
+        products = Prodotto.objects.filter(is_sold=False).order_by('-nome')  # Nome Z-A
+    else:
+        products = Prodotto.objects.filter(is_sold=False)  # Default
     if request.user.is_authenticated:
         unread_notifications_count = request.user.notifications.filter(is_read=False).count()
     else:
