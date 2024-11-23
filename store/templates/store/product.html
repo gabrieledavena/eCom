@@ -17,6 +17,19 @@
     .like-btn i:hover {
         opacity: 0.7; /* Aggiungi un effetto hover */
     }
+
+    a {
+            text-decoration: none; /* Rimuove la sottolineatura predefinita */
+            color: #007bff; /* Colore iniziale */
+            font-size: 30px;
+            position: relative;
+            transition: color 0.3s ease; /* Animazione sul colore */
+        }
+
+        /* Effetto hover */
+        a:hover {
+            color: #003875; /* Cambia colore al passaggio */
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -42,9 +55,9 @@
 
           <p class="card-text">€ {{product.price}}</p>
 
-          <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p>
-
-<div class="button-container" style="display: flex; justify-content: center; gap: 30px;">
+          <a href="{% url 'account:displaySupplier' product.supplier.id  %}">  <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p> </a>
+            <br>
+                <div class="button-container" style="display: flex; justify-content: center; gap: 30px;">
 
           <button value="{{ product.id }}" class="btn btn-outline-dark" id="add-cart"> <i class="bi-cart-fill me-1"> Aggiungi al carrello </i></button>
 

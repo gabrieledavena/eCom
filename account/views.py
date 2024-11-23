@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+from django.utils.functional import empty
 
 from checkout.models import Order
 from reviews.models import Review
@@ -82,14 +83,18 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
         average=0
         for review in Review.objects.filter(supplier=self.object):
             average= average + review.rating
-        average = average/len(Review.objects.filter(supplier=self.object))
-        halfstar=0
-        context['average'] = int (average)
-        if average % 1 >= 0.3 :
-            halfstar = 1
-            context['halfstar'] = halfstar
-        context['empty']= 5 -halfstar - int (average)
-
+        if (len(Review.objects.filter(supplier=self.object))) > 0:
+            average = average/len(Review.objects.filter(supplier=self.object))
+            halfstar=0
+            context['average'] = int (average)
+            if average % 1 >= 0.3 :
+                halfstar = 1
+                context['halfstar'] = halfstar
+            context['empty']= 5 -halfstar - int (average)
+        else:
+            context['empty'] = 5
+            context['halfstar'] = 0
+            context['average'] = 0
 
         return context
 
@@ -142,3 +147,23 @@ def like(request, pk):
         prodotto.likes.add(request.user.customer)
 
     return redirect('store:product', pk=pk)
+
+def displaySupplier(request, pk):
+    supplier = get_object_or_404(Supplier, id=pk)
+    products = Prodotto.objects.filter(supplier=supplier).filter(is_sold=False)
+    reviews = Review.objects.filter(supplier=supplier)
+
+    average = 0
+    for review in Review.objects.filter(supplier=supplier):
+        average = average + review.rating
+    if (len(Review.objects.filter(supplier=supplier))) > 0:
+        average = average / len(Review.objects.filter(supplier=supplier))
+        halfstar = 0
+        if average % 1 >= 0.3:
+            halfstar = 1
+        empty = 5-halfstar - int (average)
+    else:
+        average = 0
+        halfstar = 0
+        empty=5
+    return render(request, 'account/displaySupplier.html', {'products': products, 'supplier': supplier, 'reviews': reviews, 'average': average, 'halfstar': halfstar, 'empty': empty})

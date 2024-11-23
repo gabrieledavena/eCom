@@ -15,6 +15,7 @@ urlpatterns = [
 
     path("Customerprofile/<int:pk>/", CustomerProfileView.as_view(), name= 'customerprofile'),
     path("Supplierprofile/<int:pk>/", SupplierProfileView.as_view(), name='supplierprofile'),
+    path("displaySupllier/<int:pk>/", displaySupplier, name='displaySupplier'),
 
     path("addproduct/", addproduct, name='addproduct'),
     path("deleteproduct/<int:pk>", delete_product, name='deleteproduct'),

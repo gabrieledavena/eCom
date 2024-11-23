@@ -1,0 +1,130 @@
+{%extends 'base.html' %}
+
+{% block head_plug %}
+ <style>
+        .left {
+            flex: 3; /* 7 parts of 8 */
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin-right: 30px;
+        }
+
+        .right {
+            flex: 1; /* 1 part of 8 */
+            background-color: #cfe9f6;
+            padding: 20px;
+            max-height: 600px;
+        }
+        section.py-1 {
+            margin: 30px;
+            display: flex;
+        }
+
+        div.box-inner_review {
+            display: compact;
+            height: 450px;
+            overflow:auto;
+            padding:5px;
+            }
+
+ </style>
+{% endblock %}
+
+{%block content %}
+        <!-- Header-->
+        <header class="bg-dark py-1">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Profilo di {{ supplier }}</h1>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- Section-->
+        <section class="py-1">
+            <div class="left">
+                <div class="container px-4 px-lg-5 mt-5">
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                        {% for product in products%}
+
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{{product.image.url}}" alt="..." />
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">{{product.nome}}</h5>
+                                        <!-- Product price-->
+                                        ${{product.price}}
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/store/product/{{ product.id }}/">View product</a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+            <div style="text-align: center;">
+            <h1> RECENSIONI </h1>
+
+
+                <div class="box-inner_review">
+                    <div class="card-body">
+                        <div style="text-align: center;">
+                            {% for review in reviews %}
+
+                                <div class="card" style="border-radius: 20px; border-bottom: 4px; border-left-width: 2px; margin:3px">
+                                    <br>
+                                    <h3>{{ review.customer.nome }} {{ review.customer.cognome }}</h3>
+                                    <!-- Visualizzazione delle stelle per il voto della singola recensione -->
+                                    <span>
+                                        {% for i in "12345" %}
+                                            {% if i <= review.rating|floatformat %}
+                                                <i class="fas fa-star text-warning"></i> <!-- Stella piena -->
+                                            {% else %}
+                                                <i class="far fa-star text-warning"></i> <!-- Stella vuota -->
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span><br>
+                                    <p> {{ review.comment }}</p>
+                                </div>
+                            {% empty %}
+                                <p>Non ci sono recensioni per questo prodotto.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                            <span>
+                                {% for i in "12345" %}
+                                    {% if i <= average|floatformat %}
+                                        <i class="fas fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% endif %}
+                                {% endfor %}
+                                {% if halfstar == 1 %}
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                                {% endif %}
+                                {% for i in "12345" %}
+                                    {% if i <= empty|floatformat %}
+                                        <i class="far fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% endif %}
+                                {% endfor %}
+                            </span><br>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+        
