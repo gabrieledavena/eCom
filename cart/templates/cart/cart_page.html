@@ -19,12 +19,23 @@
         }
 
         .right-section {
+            display: inline-block; /* Adatta dinamicamente la dimensione al contenuto */
+            width: fit-content; /* Adatta la larghezza esattamente al contenuto */
+            height: fit-content; /* Adatta l'altezza esattamente al contenuto */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombra leggera opzionale */
+
             flex: 1;
             background-color: rgba(252, 255, 198, 0.98);
             padding: 20px;
             border: 1px solid black;
             border-radius: 15px;
             margin: 6px;
+        }
+        a {
+            text-decoration: none; /* Rimuove la sottolineatura predefinita */
+            color: #007bff; /* Colore iniziale */
+            position: relative;
+            transition: color 0.3s ease; /* Animazione sul colore */
         }
     </style>
 
@@ -53,12 +64,13 @@
                         <div class="col-md-8">
                             <div class="card-body">
                             <div style="text-align: center;">
-                                <h5 class="card-title">{{product.nome}}</h5>
+                                <h5 class="card-title" style="font-size: 35px"><a href=" {% url "store:product" product.id %}"> {{product.nome}}</a></h5>
                                 <p class="card-text">{{product.description}}</p>
 
-                                <p class="card-text">€ {{product.price}}</p>
+                                <p class="card-text" style="font-size: 25px">€ {{product.price}}</p>
+                                <p class="card-text" style="font-size: 20px">Taglia: <strong>IT {{product.size}}</strong></p>
 
-                                <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p>
+                                <p class="card-text" style="font-size: 20px"><small class="text-body-secondary"><a href="{% url "account:displaySupplier" product.supplier.id %}">{{product.supplier}}</a></small></p>
 
                                 <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete_product">Elimina</button>
                             </div>

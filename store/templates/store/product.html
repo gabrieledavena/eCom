@@ -21,7 +21,6 @@
     a {
             text-decoration: none; /* Rimuove la sottolineatura predefinita */
             color: #007bff; /* Colore iniziale */
-            font-size: 30px;
             position: relative;
             transition: color 0.3s ease; /* Animazione sul colore */
         }
@@ -50,10 +49,11 @@
       <div class="col-md-8">
         <div class="card-body">
             <div style="text-align: center;">
-          <h5 class="card-title">{{product.nome}}</h5>
+          <h5 class="card-title" style="font-size: 40px">{{product.nome}}</h5>
           <p class="card-text">{{product.description}}</p>
 
-          <p class="card-text">€ {{product.price}}</p>
+                <p class="card-text" > <strong> € {{product.price}} </strong></p>
+          <p class="card-text">Taglia: IT <strong>{{product.size}}</strong></p>
 
           <a href="{% url 'account:displaySupplier' product.supplier.id  %}">  <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p> </a>
             <br>

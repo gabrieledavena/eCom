@@ -51,22 +51,23 @@
                             {% endif %}
                     </i>
                 </a>
-            {% endif %}
-        
-        <!-- Per login/logout-->
-            {% if not user.is_staff %}
+                {% if not user.is_staff %}
                 <form class="d-flex">
                 <a href="{% url 'cart:cart_page' %}" class="btn btn-outline-dark"><i class="bi-cart-fill me-1"></i>
                     Carrello
                     <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart-quantity">{{ cart|length }}</span>
                 </a>
                 </form>
-            {% endif %}
+                {% endif %}
             
             <!-- Ordini-->
-            {% if user.is_staff %}
-                <a class="fas fa-box" href="{% url "checkout:supplierorderview" %}"> </a>
+                {% if user.is_staff %}
+                    <a class="fas fa-box" href="{% url "checkout:supplierorderview" %}"> </a>
+                {% endif %}
             {% endif %}
+        
+        <!-- Per cart-->
+            
         
             {% if user.is_authenticated %}
 
@@ -120,6 +121,12 @@
                         background-color: green;
                         color: white;
                         border-color: green;
+                    }
+                    a {
+                        text-decoration: none; /* Rimuove la sottolineatura predefinita */
+                        color: #007bff; /* Colore iniziale */
+                        position: relative;
+                        transition: color 0.3s ease; /* Animazione sul colore */
                     }
                 </style>
             {% endif %}

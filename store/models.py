@@ -19,6 +19,8 @@ class Prodotto(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     is_sold=models.BooleanField(default=False)
 
+    SIZE_CHOICES = [(i, str(i)) for i in range(37, 46)]
+    size = models.IntegerField(choices=SIZE_CHOICES, default=37)
     likes = models.ManyToManyField(Customer, related_name='liked', blank=True)
 
     def __str__(self):

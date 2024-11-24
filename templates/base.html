@@ -20,6 +20,29 @@
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
+    
+        <style>
+            html, body {
+            height: 100%; /* Assicura che il viewport occupi l'intera altezza */
+            margin: 0;    /* Rimuove i margini predefiniti */
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column; /* Dispone i figli in verticale */
+                justify-content: space-between; /* Distribuisce lo spazio */
+                min-height: 100vh; /* Assicura che l'altezza minima del body sia l'altezza del viewport */
+            }
+            
+            main {
+                flex: 1; /* Fa in modo che il contenuto principale riempia lo spazio vuoto */
+            }
+            
+            footer {
+                background-color: #333; /* Puoi personalizzare lo stile del footer */
+                color: white;
+            }
+        </style>
         {% block head_plug%}
             
         {% endblock %}

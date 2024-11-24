@@ -136,15 +136,16 @@ def delete_product(request, pk):
 
 @login_required
 def like(request, pk):
-    prodotto = get_object_or_404(Prodotto, id=pk)
+    if not request.user.is_staff:
+        prodotto = get_object_or_404(Prodotto, id=pk)
 
-    # Controlla se l'utente ha già messo il like
-    if request.user.customer in prodotto.likes.all():
-        # Rimuove il like se già presente
-        prodotto.likes.remove(request.user.customer)
-    else:
-        # Aggiunge il like
-        prodotto.likes.add(request.user.customer)
+        # Controlla se l'utente ha già messo il like
+        if request.user.customer in prodotto.likes.all():
+            # Rimuove il like se già presente
+            prodotto.likes.remove(request.user.customer)
+        else:
+            # Aggiunge il like
+            prodotto.likes.add(request.user.customer)
 
     return redirect('store:product', pk=pk)
 

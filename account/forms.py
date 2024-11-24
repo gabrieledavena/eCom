@@ -28,4 +28,4 @@ class SupplierProfileForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Prodotto
-        fields = ['nome', 'price', 'image', 'category', 'description']
+        fields = ['nome', 'price', 'image', 'category', 'description', 'size']
