@@ -58,6 +58,24 @@
                     .banner {
                         transition: margin-top 0.3s ease-in-out; /* Effetto di scorrimento */
                     }
+                    .size-options {
+                      display: flex;
+                      gap: 10px; /* Spazio tra le opzioni */
+                    }
+                    .category-options {
+                      display: flex;
+                      gap: 10px; /* Spazio tra le opzioni */
+                    }
+                    
+                    .size-options label {
+                      display: flex;
+                      align-items: center;
+                      cursor: pointer;
+                    }
+                    
+                    .size-options input[type="radio"] {
+                      margin-right: 5px; /* Spazio tra il pulsante e il testo */
+                    }
         </style>
         {% block head_plug%}
             
@@ -105,11 +123,48 @@
                                         <label for="price_max" class="form-label">Prezzo Massimo</label>
                                         <input type="number" class="form-control" id="price_max" name="price_max" min="0" value="{{ request.GET.price_max }}">
                                     </div>
-
+                            
+                            <!-- FILTRO PER TAGLIA-->
+                            
+                                <label for="size">Seleziona la tua taglia di scarpe:</label>
+                                <div id="size-options" class="size-options">
+                                  <!-- Opzione predefinita: Tutte le taglie -->
+                                  <label>
+                                    <input type="radio" name="size" value="" {% if request.GET.size == "" %}checked{% endif %}>
+                                    Tutte le taglie
+                                  </label>
+                                  
+                                  {% for size in range_size %}
+                                    <label>
+                                      <input type="radio" name="size" value="{{ size }}" {% if request.GET.size == size|stringformat:'s' %}checked{% endif %}>
+                                      {{ size }}
+                                    </label>
+                                  {% endfor %}
+                                </div>
+                            
+                            <!-- FILTRO PER CATEGORIA-->
+                            <label for="category_S">Seleziona la tua categoria:</label>
+                            <div id="category-options" class="category-options">
+                                <label>
+                                    <input type="radio" name="category_S" value="" {% if request.GET.category_S == "" %}checked {% endif %}>
+                                    Tutte le categoria
+                                </label>
+                                
+                                {% for category in category_range  %}
+                                    <label> 
+                                        <input type="radio" name="category_S" value="{{ category }}"  {% if request.GET.category_S == category|stringformat:'s' %} checked{% endif %}>
+                                        {{ category }}
+                                    </label>
+                                {% endfor %}
                                 
                             </div>
+                            
+                            
+                            
+                            </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Applica Filtri</button>
+                                <button type="submit" class="btn btn-primary" style="margin-right: 10px">Applica Filtri</button>
+                                <button type="reset" class="btn btn-outline-danger">Azzera Filtri</button>
                             </div>
                         </form>
                    
@@ -180,6 +235,9 @@
                 });
             });
         });
+            
+            
+            
         </script>
     </body>
 </html>

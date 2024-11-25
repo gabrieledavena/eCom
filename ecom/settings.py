@@ -75,6 +75,7 @@ TEMPLATES = [
 
                 "cart.context_processors.cart",
                 "ecom.context_processors.notification_count",
+                "utils.context_processors.range_size",
             ],
         },
     },

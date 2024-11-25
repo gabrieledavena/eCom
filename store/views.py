@@ -12,15 +12,24 @@ def search(request):
         products = Prodotto.objects.filter(is_sold= False)
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
+    size = request.GET.get('size')
+    category_S = request.GET.get('category_S')
 
     # Applica i Filtri se Specificati
     if price_min:
         products = products.filter(price__gte=price_min)
     if price_max:
         products = products.filter(price__lte=price_max)
+    if size:
+        products = products.filter(size=size)
+    if category_S:
+        products = products.filter(category__nome=category_S)
+
     return render(request, 'search_results.html', {'products': products, 'filters': {
             'price_min': price_min,
             'price_max': price_max,
+            'size': size,
+            'category_S': category_S,
         },
     })
 
