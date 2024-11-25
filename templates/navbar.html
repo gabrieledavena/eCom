@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: sticky">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand" href="/store">ECOM</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -27,10 +27,16 @@
                     </ul>
                 </li>
             </ul>
-
+            
+            <form class="d-flex mx-auto" action="{% url 'store:search' %}" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Cerca prodotti..." aria-label="Search", value="{{ request.GET.query }}">
+                    <input type="hidden" name="price_min" value="{{ request.GET.price_min }}">
+                    <input type="hidden" name="price_max" value="{{ request.GET.price_max }}">
+    
+                    <button type="button" class="btn btn-outline-secondary" id="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal"><i class="fas fa-filter"></i></button>
+            </form>
             
 
-            
             <!-- Per Notifiche-->
             {% if user.is_authenticated %}
                 <a class="nav-link" href="{% url 'checkout:notification_list' %}">
@@ -128,6 +134,12 @@
                         position: relative;
                         transition: color 0.3s ease; /* Animazione sul colore */
                     }
+                    
+                    form.d-flex button {
+                        margin-left: 1px;
+                    }
+                    
+                    
                 </style>
             {% endif %}
 

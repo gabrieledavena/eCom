@@ -4,6 +4,26 @@ from .models import Prodotto, Category
 
 # Create your views here.
 
+def search(request):
+    query = request.GET.get('query', '')
+    if not query == '':
+        products = Prodotto.objects.filter(nome__icontains=query).filter(is_sold= False) if query else []
+    else:
+        products = Prodotto.objects.filter(is_sold= False)
+    price_min = request.GET.get('price_min')
+    price_max = request.GET.get('price_max')
+
+    # Applica i Filtri se Specificati
+    if price_min:
+        products = products.filter(price__gte=price_min)
+    if price_max:
+        products = products.filter(price__lte=price_max)
+    return render(request, 'search_results.html', {'products': products, 'filters': {
+            'price_min': price_min,
+            'price_max': price_max,
+        },
+    })
+
 def product_view(request, pk):
     product = get_object_or_404(Prodotto, id=pk)
     return render(request, "store/product.html", {'product':product})

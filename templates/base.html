@@ -42,6 +42,22 @@
                 background-color: #333; /* Puoi personalizzare lo stile del footer */
                 color: white;
             }
+            .filter-panel {
+                        display: none; /* Inizialmente nascosto */
+                        padding: 20px;
+                        background-color: #f9f9f9;
+                        border-bottom: 1px solid #ddd;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    /* Mostra il pannello quando attivo */
+                    .filter-panel.active {
+                        display: block;
+                    }
+                    /* Banner */
+                    .banner {
+                        transition: margin-top 0.3s ease-in-out; /* Effetto di scorrimento */
+                    }
         </style>
         {% block head_plug%}
             
@@ -71,7 +87,33 @@
     
         {%include 'navbar.html' %}
         {% block banner %}
-            
+                        <div class="filter-panel" id="filter-panel">
+
+                        <form action="{% url 'store:search' %}" method="GET">
+                            <div class="modal-body">
+                                <!-- Filtri -->
+                                    <input type="hidden" name="query" value="{{ request.GET.query }}">
+
+                                    <!-- Filtro Prezzo Minimo -->
+                                    <div class="mb-3">
+                                        <label for="price_min" class="form-label">Prezzo Minimo</label>
+                                        <input type="number" class="form-control" id="price_min" name="price_min" min="0" value="{{ request.GET.price_min }}">
+                                    </div>
+                
+                                    <!-- Filtro Prezzo Massimo -->
+                                    <div class="mb-3">
+                                        <label for="price_max" class="form-label">Prezzo Massimo</label>
+                                        <input type="number" class="form-control" id="price_max" name="price_max" min="0" value="{{ request.GET.price_max }}">
+                                    </div>
+
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Applica Filtri</button>
+                            </div>
+                        </form>
+                   
+            </div>
         {% endblock %}
         
         {% if messages %}
@@ -97,5 +139,47 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{% static 'js/scripts.js'%}"></script>
+        
+        <script> document.addEventListener("DOMContentLoaded", function () {
+            const filterButton = document.getElementById("filter-button");
+            const filterPanel = document.getElementById("filter-panel");
+            const banner = document.querySelector(".banner");
+
+                filterButton.addEventListener("click", function () {
+                    // Alterna lo stato attivo del pannello filtri
+                    filterPanel.classList.toggle("active");
+            
+                    // Aggiorna il margine del banner in base allo stato del pannello
+                    if (filterPanel.classList.contains("active")) {
+                        banner.style.marginTop = filterPanel.offsetHeight + "px";
+                    } else {
+                        banner.style.marginTop = "0";
+                    }
+                });
+            });
+            
+            document.addEventListener("DOMContentLoaded", function () {
+            const searchForm = document.getElementById("search-form");
+            const filterForm = document.getElementById("filter-form");
+        
+            searchForm.addEventListener("submit", function (event) {
+                // Trova tutti i campi del form dei filtri
+                const filterInputs = filterForm.querySelectorAll("input");
+        
+                // Aggiungi i valori dei filtri al form di ricerca
+                filterInputs.forEach((input) => {
+                    if (input.name && input.value) {
+                        // Crea un campo nascosto nel form di ricerca
+                        const hiddenInput = document.createElement("input");
+                        hiddenInput.type = "hidden";
+                        hiddenInput.name = input.name;
+                        hiddenInput.value = input.value;
+        
+                        searchForm.appendChild(hiddenInput);
+                    }
+                });
+            });
+        });
+        </script>
     </body>
 </html>
