@@ -11,21 +11,7 @@
                 {% if user.is_authenticated and user.is_staff and not user.is_superuser %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'account:supplierprofile' user.supplier.pk %}">Profilo </a></li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/store">Tutte le scarpe</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-
-                        <li><a class="dropdown-item" href="{% url 'store:category' 1 %}">Scarpe per sport</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 2 %}">Sneaker</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 3 %}">Stivali</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 4 %}">Scarpe eleganti</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 5 %}">Scarpe aperte</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 6 %}">Pantofole</a></li>
-                        <li><a class="dropdown-item" href="{% url 'store:category' 7 %}">Scarpe per out-door</a></li>
-                    </ul>
-                </li>
+                
             </ul>
             
             <form class="d-flex mx-auto" action="{% url 'store:search' %}" method="GET">

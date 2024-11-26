@@ -54,6 +54,8 @@
 
                 <p class="card-text" > <strong> € {{product.price}} </strong></p>
           <p class="card-text">Taglia: IT <strong>{{product.size}}</strong></p>
+                      <p class="card-text">Marca:  <strong>{{product.marca.nome}}</strong></p>
+
 
           <a href="{% url 'account:displaySupplier' product.supplier.id  %}">  <p class="card-text"><small class="text-body-secondary">{{product.supplier}}</small></p> </a>
             <br>

@@ -62,7 +62,7 @@
                       display: flex;
                       gap: 10px; /* Spazio tra le opzioni */
                     }
-                    .category-options {
+                    .category-options, .marca-options {
                       display: flex;
                       gap: 10px; /* Spazio tra le opzioni */
                     }
@@ -143,11 +143,11 @@
                                 </div>
                             
                             <!-- FILTRO PER CATEGORIA-->
-                            <label for="category_S">Seleziona la tua categoria:</label>
+                            <label for="category_S">Seleziona la  categoria:</label>
                             <div id="category-options" class="category-options">
                                 <label>
                                     <input type="radio" name="category_S" value="" {% if request.GET.category_S == "" %}checked {% endif %}>
-                                    Tutte le categoria
+                                    Tutte le categorie
                                 </label>
                                 
                                 {% for category in category_range  %}
@@ -159,7 +159,20 @@
                                 
                             </div>
                             
-                            
+                            <!-- PER LA MARCA-->
+                            <label for="marca_S">Seleziona la marca</label>
+                            <div id="marca-options" class="marca-options">
+                                <label>
+                                    <input type="radio" name="marca_S" value="" {% if request.GET.marca == "" %} checked{% endif %} >
+                                    Tutte le marche
+                                </label>
+                                {% for marca in marca_CHOICES %}
+                                    <label>
+                                    <input type="radio" name="marca_S" value="{{ marca }}" {% if request.GET.marca_S == marca|stringformat:'s' %} checked{% endif %}>
+                                    {{ marca }}
+                                    </label>
+                                {% endfor %}
+                            </div>
                             
                             </div>
                             <div class="modal-footer">
@@ -195,7 +208,10 @@
         <!-- Core theme JS-->
         <script src="{% static 'js/scripts.js'%}"></script>
         
-        <script> document.addEventListener("DOMContentLoaded", function () {
+        <script> 
+            //PER FAR MUOVERE IL BANNER
+            
+            document.addEventListener("DOMContentLoaded", function () {
             const filterButton = document.getElementById("filter-button");
             const filterPanel = document.getElementById("filter-panel");
             const banner = document.querySelector(".banner");
@@ -213,6 +229,7 @@
                 });
             });
             
+            //PER LA RICERCA
             document.addEventListener("DOMContentLoaded", function () {
             const searchForm = document.getElementById("search-form");
             const filterForm = document.getElementById("filter-form");

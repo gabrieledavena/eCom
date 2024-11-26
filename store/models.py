@@ -9,6 +9,12 @@ class Category(models.Model):
     def __str__(self):
         return self.nome
 
+class Marca(models.Model):
+    nome = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nome
+
 
 class Prodotto(models.Model):
     nome= models.CharField( max_length=50)
@@ -19,6 +25,7 @@ class Prodotto(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     is_sold=models.BooleanField(default=False)
 
+    marca = models.ForeignKey(Marca, on_delete=models.CASCADE, default = 1)
     SIZE_CHOICES = [(i, str(i)) for i in range(37, 46)]
     size = models.IntegerField(choices=SIZE_CHOICES, default=37)
     likes = models.ManyToManyField(Customer, related_name='liked', blank=True)
