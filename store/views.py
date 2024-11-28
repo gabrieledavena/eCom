@@ -39,12 +39,13 @@ def search(request):
 
 def product_view(request, pk):
     product = get_object_or_404(Prodotto, id=pk)
-    return render(request, "store/product.html", {'product':product})
+    advices = Prodotto.objects.filter(marca=product.marca).exclude(id=product.id).filter(is_sold=False)
+    return render(request, "store/product.html", {'product':product, 'advices':advices})
 
 def category(request, cat):
     try:
         myCategory = Category.objects.get(id=cat)
-        products = Prodotto.objects.filter(category = myCategory)
+        products = Prodotto.objects.filter(category = myCategory).filter(is_sold= False)
     except:
         return redirect('/store')
     return render(request, 'store/category.html', {'products':products, 'category':myCategory})
