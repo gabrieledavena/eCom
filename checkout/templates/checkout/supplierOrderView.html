@@ -83,6 +83,15 @@
         .button.reject {
             background-color: #f44336; /* Rosso */
         }
+        .review-card {
+            border: 1px solid #ddd; /* Bordi sottili */
+            border-radius: 10px; /* Angoli arrotondati */
+            padding: 20px; /* Spaziatura interna */
+            margin: 15px 0; /* Spaziatura verticale tra le card */
+            background-color: #fff; /* Sfondo bianco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+            justify-content: center;
+        }
     </style>
 
     <script>
@@ -246,17 +255,56 @@
 
     <!-- COMPLETED -->
 <div class="toggle-dropdown">
-    <button class="toggle-header" onclick="toggleDropdown('completedContent')">Completed</button>
+    <button class="toggle-header" onclick="toggleDropdown('completedContent')">Completed ({{ completed_orders.count }})</button>
     <div class="toggle-content" id="completedContent">
+        {% for completed in completed_orders %}
         <div class="card">
-            <h4>Ordine #4</h4>
-            <p>Dettagli dell'ordine completato.</p>
-        </div>
-        <div class="card">
-            <h4>Ordine #5</h4>
-            <p>Dettagli dell'ordine completato.</p>
-        </div>
-    </div>
-</div></div>
+            <div class="info-section">
+                <h4>Ordine {{ completed.id }}</h4>
+                <p>Da: {{ completed.customer.nome }} {{ completed.customer.cognome }}</p>
+                <p>email: {{ completed.customer.email }}</p>
+                <p>Indirizzo: {{ completed.customer.indirizzo }}</p>
+                <p>Creato il: {{ completed.created_at }}</p>
+            </div>
 
+            <div class="scrollable-section">
+                    {% for item in completed.items.all %}
+                        <div class="square-card">
+
+                        <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                            <br>
+                        <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
+                            <br>
+                        €{{ item.prodotto.price }}
+
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <div class="button-section"><div style="text-align: center;">
+                <br><br>
+                <div style="text-align: center;"><strong>Totale: €{{ completed.get_total }}</strong></div>
+                <div style="text-align: center;"><strong>Spedito il: {{ completed.shipped_at }}</strong></div>
+
+                <div class="review-card" >
+
+                            <!-- Visualizzazione delle stelle per il voto della singola recensione -->
+                            <span>
+                                {% for i in "12345" %}
+                                    {% if i <= completed.reviews.rating|floatformat %}
+                                        <i class="fas fa-star text-warning"></i> <!-- Stella piena -->
+                                    {% else %}
+                                        <i class="far fa-star text-warning"></i> <!-- Stella vuota -->
+                                    {% endif %}
+                                {% endfor %}
+                            </span><br>
+                            <p> {{ completed.reviews.comment }}</p>
+                            <p style="font-size: 10px">{{ completed.reviews.created_at }}</p>
+                        </div></div>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
 {% endblock %}

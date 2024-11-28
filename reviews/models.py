@@ -8,7 +8,7 @@ from checkout.models import Order
 class Review(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='reviews')
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

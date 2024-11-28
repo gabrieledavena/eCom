@@ -50,7 +50,9 @@
                     
                     /* Mostra il pannello quando attivo */
                     .filter-panel.active {
-                        display: block;
+                        display: flex;
+                        justify-content: center;
+                        align-content: center;
                     }
                     /* Banner */
                     .banner {
@@ -59,10 +61,14 @@
                     .size-options {
                       display: flex;
                       gap: 10px; /* Spazio tra le opzioni */
+                        justify-content: center;
+                        align-content: center;
                     }
                     .category-options, .marca-options {
                       display: flex;
                       gap: 10px; /* Spazio tra le opzioni */
+                        justify-content: center;
+                        align-content: center;
                     }
                     
                     .size-options label {
@@ -136,28 +142,30 @@ input[type="radio"]:checked + .radio-label {
     
         {%include 'navbar.html' %}
         {% block banner %}
-                        <div class="filter-panel" id="filter-panel">
+                        <div class="filter-panel" id="filter-panel" style="justify-content: center">
 
                         <form action="{% url 'store:search' %}" method="GET">
                             <div class="modal-body">
                                 <!-- Filtri -->
                                     <input type="hidden" name="query" value="{{ request.GET.query }}">
-
+                                    <div class="d-flex justify-content-between gap-3">
                                     <!-- Filtro Prezzo Minimo -->
-                                    <div class="mb-3">
+                                    <div class="mb-3 flex-fill" style="margin-left: 200px;">
                                         <label for="price_min" class="form-label">Prezzo Minimo</label>
                                         <input type="number" class="form-control" id="price_min" name="price_min" min="0" value="{{ request.GET.price_min }}">
                                     </div>
                 
                                     <!-- Filtro Prezzo Massimo -->
-                                    <div class="mb-3">
-                                        <label for="price_max" class="form-label">Prezzo Massimo</label>
+                                    <div class="mb-3 flex-fill" style="margin-right: 200px">
+                                        <label for="price_max" class="form-label" style="justify-content: center">Prezzo Massimo</label>
                                         <input type="number" class="form-control" id="price_max" name="price_max" min="0" value="{{ request.GET.price_max }}">
                                     </div>
-                            
+                                    </div>
                             <!-- FILTRO PER TAGLIA-->
-                            
-                                <label for="size">Seleziona la tua taglia di scarpe:</label>
+                                                                    <br>
+                                <div style="text-align: center;">
+                                    <label for="size"><strong> Seleziona la taglia:</strong></label>
+                                                                
                                 <div id="size-options" class="size-options">
                                   <!-- Opzione predefinita: Tutte le taglie -->
                                   <label class="radio-label">
@@ -172,9 +180,11 @@ input[type="radio"]:checked + .radio-label {
                                     </label>
                                   {% endfor %}
                                 </div>
-                            
+                            </div>
                             <!-- FILTRO PER CATEGORIA-->
-                            <label for="category_S">Seleziona la  categoria:</label>
+                                <br>
+                                <div style="text-align: center;">
+                            <label for="category_S"><strong> Seleziona la  categoria:</strong></label></div>
                             <div id="category-options" class="category-options">
                                 <label class="radio-label">
                                     <input type="radio" name="category_S" value="" {% if request.GET.category_S == "" %}checked {% endif %}>
@@ -190,8 +200,9 @@ input[type="radio"]:checked + .radio-label {
                                 
                             </div>
                             
-                            <!-- PER LA MARCA-->
-                            <label for="marca_S">Seleziona la marca</label>
+                            <!-- PER LA MARCA--><center>
+                                <br>
+                            <label for="marca_S"><strong> Seleziona la marca:</strong></label></center>
                             <div id="marca-options" class="marca-options">
                                 <label class="radio-label">
                                     <input type="radio" id="marca-all" name="marca_S" value="" {% if request.GET.marca_S == "" %} checked{% endif %}>

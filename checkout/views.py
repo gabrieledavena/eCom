@@ -96,13 +96,13 @@ class SupplierOrderView(UserPassesTestMixin, TemplateView):
         # Recupera gli ordini dell'utente
         pending_orders = self.request.user.supplier.orders.filter(status='PENDING')
         accepted_orders = self.request.user.supplier.orders.filter(status='ACCEPTED')
-        completed_orders = self.request.user.supplier.orders.filter(status='COMPETED')
+        completed_orders = self.request.user.supplier.orders.filter(status='COMPLETED')
         transiting_orders = self.request.user.supplier.orders.filter(status='TRANSITING')
 
         # Aggiungi gli ordini al contesto con i relativi items
         context['pending_orders'] = pending_orders.prefetch_related('items')  # Usa prefetch_related
         context['accepted_orders'] = accepted_orders.prefetch_related('items')
-        context['competed_orders'] = completed_orders.prefetch_related('items')
+        context['completed_orders'] = completed_orders.prefetch_related('items')
         context['transiting_orders'] = transiting_orders.prefetch_related('items')
 
         return context
