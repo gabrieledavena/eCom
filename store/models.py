@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 import datetime
 from django.contrib.auth.models import User
@@ -32,4 +33,3 @@ class Prodotto(models.Model):
 
     def __str__(self):
         return self.nome
-
