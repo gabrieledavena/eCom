@@ -112,7 +112,7 @@ def addproduct(request):  # Assicurati che sia 'supplier_id'
     supplier = Supplier.objects.get(user=request.user)
 
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.supplier = supplier  # Associa il prodotto al fornitore

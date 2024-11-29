@@ -29,3 +29,8 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Prodotto
         fields = ['nome', 'price', 'image', 'category', 'description', 'size', 'marca']
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',  # Fallback styling (for non-template tweaks users)
+            }),
+        }

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "checkout.apps.CheckoutConfig",
     "reviews.apps.ReviewsConfig",
+
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [

@@ -20,7 +20,7 @@ class Prodotto(models.Model):
     nome= models.CharField( max_length=50)
     price = models.DecimalField(default=0, max_digits=6, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default = 1)
-    description = models.CharField( max_length=200, blank=True)
+    description = models.CharField( max_length=400, blank=True)
     image = models.ImageField(upload_to='uploads/product', blank=True, default='uploads/product/stock_shoes.jpg')
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     is_sold=models.BooleanField(default=False)
