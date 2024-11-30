@@ -65,7 +65,7 @@
                             <div class="card-body">
                             <div style="text-align: center;">
                                 <h5 class="card-title" style="font-size: 35px"><a href=" {% url "store:product" product.id %}"> {{product.nome}}</a></h5>
-                                <p class="card-text">{{product.description}}</p>
+
 
                                 <p class="card-text" style="font-size: 25px">€ {{product.price}}</p>
                                 <p class="card-text" style="font-size: 20px">Taglia: <strong>IT {{product.size}}</strong></p>
@@ -117,15 +117,19 @@
                 {{ request.user.customer.nome }} {{ request.user.customer.cognome }} <br>
                 {{ request.user.customer.email }} <br>
 
-                <strong>Indirizzo:</strong><a href="{% url "account:update_user" request.user.customer.id %}"> {{ request.user.customer.indirizzo }}</a> <br>
+                <strong>Indirizzo:</strong><br>
+                <a href="{% url "account:update_user" request.user.customer.id %}"> {{ request.user.customer.indirizzo|default:"Aggiorna profilo per continuare" }}</a> <br>
 
                 <br>
                 <br>
+                {% if request.user.customer.indirizzo %}
                 <form action="{% url 'checkout:checkout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-dark" >Procedi al pagamento</button>
                 </form>
-
+                {% else %}
+                    <a href="{% url "account:update_user" request.user.customer.id %}" class="btn btn-outline-dark">Procedi al pagamento</a>
+                {% endif %}
             </div>
         </div>
 

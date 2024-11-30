@@ -36,7 +36,7 @@
             display: flex;
             flex-direction: row;
             align-items: stretch;
-            height: 300px;
+            height: 350px;
         }
         .info-section {
             flex: 1;
@@ -50,13 +50,14 @@
         }
         .square-card {
             display: inline-block; /* Permette la disposizione in linea */
-            width: 250px; /* Dimensione quadrata */
-            height: 250px; /* Dimensione quadrata */
+            width: 270px; /* Dimensione quadrata */
+            max-height: 320px; /* Dimensione quadrata */
             margin-right: 10px; /* Margine tra le card */
             background-color: #e9ecef; /* Sfondo delle card */
             border: 1px solid #ced4da; /* Bordo delle card */
             border-radius: 5px; /* Bordo arrotondato */
             text-align: center; /* Centratura del testo */
+            overflow-wrap: anywhere;
         }
         .button-section {
             flex: 1; /* 1/4 vuoto */
@@ -91,6 +92,11 @@
             background-color: #fff; /* Sfondo bianco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombra leggera */
             justify-content: center;
+        }
+        a {
+            word-wrap: break-word;
+            white-space: normal;
+            text-decoration: none;
         }
     </style>
 
@@ -141,7 +147,7 @@
                     {% for item in pending.items.all %}
                         <div class="square-card">
 
-                        <img src="{{ item.prodotto.image.url }}" alt="..." width="240" height="180">
+                        <img src="{{ item.prodotto.image.url }}" alt="..."  style="height: 180px; width: auto; object-fit: contain" >
                             <br>
                         <a href="{% url "store:product" item.prodotto.id %}"> {{ item.prodotto.nome }} </a>
                             <br>
