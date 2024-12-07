@@ -1,6 +1,8 @@
 
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -22,7 +24,13 @@ def register(request):
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.set_password(user_form.cleaned_data['password'])
+            try:
+                # Valida la password prima di impostarla
+                validate_password(user_form.cleaned_data['password'], user)
+                user.set_password(user_form.cleaned_data['password'])
+            except ValidationError as e:
+                user_form.add_error('password', e)  # Aggiunge l'errore al form
+                return render(request, 'account/register.html', {'user_form': user_form})
             user.save()
 
             # Controlla se l'utente è un fornitore

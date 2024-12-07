@@ -1,67 +1,40 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrazione</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa; /* Grigio chiaro per uno sfondo morbido */
-            font-family: Arial, sans-serif;
-        }
 
-        .registration-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-            color: #343a40;
-        }
+{% extends "base.html" %}
 
-        button {
-            width: 100%;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+{% block head_plug %}
+<style>
+.registration-container {
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    text-align: center; /* Centra il testo nel contenitore */
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
 
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #6c757d;
-        }
-    </style>
-</head>
-<body>
-    <div class="registration-container">
-        <h1>Registrati</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ user_form.as_p }}
-            <button type="submit">Registrati</button>
-        </form>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4">Pagina di Registrazione</h1>
+        <p class="lead">Si prega di compilare i campi necessari</p>
     </div>
-    <footer>
-        <p>&copy; 2024 - Tutti i diritti riservati</p>
-    </footer>
-</body>
-</html>
+    <!-- FORM DI Registrazione-->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow">
+                <div class="registration-container" style="justify-content: center">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ user_form.as_p }}
+                        <button type="submit">Registrati</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

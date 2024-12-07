@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
+{% block head_plug %}
+<style>
+.login_container{
+    
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    text-align: center; /* Centra il testo nel contenitore */
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -16,7 +27,9 @@
     <!-- FORM DI LOGIN-->
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card p-4 shadow">
+                        <div class="card p-4 shadow">
+
+            <div class="login_container">
                 <form method="post">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -26,7 +39,13 @@
                         <input type="submit" class="btn btn-success btn-block" value="Esegui login">
                     </div>
                 </form>
-                <p class="mt-2">Non hai un account? <a href="{% url 'account:register' %}">Registrati qui</a>.</p>
+            </div>
+                            <br>
+                             
+                            <div style="text-align: center;"><p class="mt-2">Non hai un account? <a href="{% url 'account:register' %}">Registrati qui</a>.</p></div>
+
+                            
+            
             </div>
         </div>
     </div>

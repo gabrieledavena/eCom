@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 
+{% block head_plug %}
+<style>
+.update_container{
+
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    text-align: center; /* Centra il testo nel contenitore */
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <header class="bg-dark py-1">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Shop in style</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                    <h1 class="display-4 fw-bolder">Aggiorna il tuo profilo</h1>
                 </div>
             </div>
         </header>
@@ -14,13 +25,18 @@
         <div class="row">
             <div class="col-md-6 offset-3">
                 <br/><br/>
+                                        <div class="card p-4 shadow">
+
+                <div class="update_container">
                 <form method="post" class="mx-auto" style="max-width: 600px" >
                     {% csrf_token %}
                     {{ form.as_p }}
                     <br><br>
                     <button type="submit" class="btn btn-secondary">Aggiorna Profilo</button>
-                    
+
                 </form>
+                </div>
+                                        </div>
             </div>
         </div>
 

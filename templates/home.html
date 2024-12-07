@@ -1,7 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block head_plug %}
+<style>
+
+    .container {
+        display: flex;
+        width: 100%;
+        margin: 0;
+        min-width: 1680px;
+
+    }
+    .left {
+        flex: 4; /* 4 parti su 5 della larghezza totale */
+        margin-left: 0;
+        padding: 10px; /* Spazio interno per un aspetto migliore */
+        text-align: center; /* Centra il contenuto */
+    }
+    .right {
+        flex: 1; /* 1 parte su 5 della larghezza totale */
+        padding: 10px; /* Spazio interno */
+        background-color: #f9f9f9; /* Aggiungi uno sfondo per distinguerlo */
+        border-left: 1px solid #ddd; /* Aggiungi una linea divisoria */
+    }
+</style>
+{% endblock %}
+
 
 {%block content%}
+<div class="container">
+    <div class="left">
+            <img src="{% static 'home.png' %}"   alt="Flying Sneakers" style="width: 100%;">
+    </div>
+    
+    <div class="right">
+        plz
+    </div>
 
-<title> HOME <title>
-
+</div>
 {%endblock%}
