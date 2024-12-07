@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_not_required
 from django.shortcuts import redirect, get_object_or_404, render
+
+from account.models import Customer
 from .models import Prodotto, Category
 
 # Create your views here.
@@ -40,7 +42,9 @@ def search(request):
 def product_view(request, pk):
     product = get_object_or_404(Prodotto, id=pk)
     advices = Prodotto.objects.filter(marca=product.marca).exclude(id=product.id).filter(is_sold=False)
-    return render(request, "store/product.html", {'product':product, 'advices':advices})
+    user_likes = product.likes.all()
+    user_advices=Prodotto.objects.filter(likes__in=user_likes).exclude(id=product.id).filter(is_sold=False)
+    return render(request, "store/product.html", {'product':product, 'advices':advices, 'user_likes':user_likes, 'user_advices':user_advices})
 
 def category(request, cat):
     try:

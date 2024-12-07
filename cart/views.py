@@ -40,7 +40,6 @@ def cart_add(request):
             cart.add(product=product)
 
             cart_quantity = cart.__len__()
-            #response = JsonResponse({'Product Name': product.nome})
             response = JsonResponse({'quantity': cart_quantity})
             if carr_vecchio == cart.__len__():
                 messages.success(request, ("Prodotto già presente nel carrello"))
@@ -49,6 +48,7 @@ def cart_add(request):
             return response
 
 
+@login_required
 def cart_delete(request):
     cart = Cart(request)
     if request.POST.get('action') == 'post':

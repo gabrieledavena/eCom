@@ -106,6 +106,7 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
             return redirect('store:home_store')
         return super().dispatch(request, *args, **kwargs)
 
+
 def addproduct(request):  # Assicurati che sia 'supplier_id'
     # Cerca il fornitore con il supplier_id e verificane la proprietà
 

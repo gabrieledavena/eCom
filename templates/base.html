@@ -231,20 +231,20 @@ input[type="radio"]:checked + .radio-label {
                    
             </div>
         {% endblock %}
-        
+
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-warning alert-dismissible fade show custom-alert" role="alert">
+                <div class="alert alert-warning alert-dismissible fade show custom-alert" role="alert" style="position: fixed; top: 40px; right: 20px; z-index: 1050; width: auto; max-width: 300px;">
                 <div style="text-align: center;">
                     {{ message }}
-                </div>    
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                
+
             {% endfor %}
         {% endif %}
         {% block content%} 
-        
+
         {% endblock%}
 
         <!-- Footer-->
