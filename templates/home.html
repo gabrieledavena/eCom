@@ -23,7 +23,15 @@
         background-color: #f9f9f9; /* Aggiungi uno sfondo per distinguerlo */
         border-left: 1px solid #ddd; /* Aggiungi una linea divisoria */
     }
+    .btn-lg {
+    display: block;      /* Imposta il bottone come blocco per occupare tutta la larghezza disponibile */
+    width: 90%;          /* Imposta la larghezza al 90% */
+    margin: 0 auto;      /* Centra il bottone orizzontalmente */
+    text-align: center;  /* Centra il testo all'interno del bottone */
+}
 </style>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 
@@ -34,7 +42,24 @@
     </div>
     
     <div class="right">
-        plz
+        <h1 class="text-center">Top Seller</h1>
+
+    <div class="row">
+        {% for supplier in suppliers %}
+            <div class="row-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            <span>{{ supplier.user }}</span>
+                            <span><strong>{{ supplier.average_rating|floatformat:2 }}</strong></span>
+                        </h5>                         
+                        <a href="{% url 'account:displaySupplier' supplier.id%}" class="btn btn-outline-dark btn-lg">Visualizza Profilo</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
     </div>
 
 </div>
