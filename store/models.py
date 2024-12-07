@@ -33,3 +33,7 @@ class Prodotto(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def save(self, *args, **kwargs):
+        self.nome=self.nome.upper()
+        super(Prodotto, self).save(*args, **kwargs)

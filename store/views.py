@@ -29,15 +29,29 @@ def search(request):
     if marca_S:
         products = products.filter(marca__nome=marca_S)
 
+    order_by = request.GET.get('order_by', 'price_asc')
 
-    return render(request, 'search_results.html', {'products': products, 'filters': {
+    # Ordina i prodotti in base alla selezione
+    if order_by == 'price_asc':
+        products = products.order_by(
+            'price')  # Prezzo crescente
+    elif order_by == 'price_desc':
+        products = products.order_by(
+            '-price')  # Prezzo decrescente
+    elif order_by == 'name_asc':
+        products = products.order_by('nome')  # Nome A-Z
+    elif order_by == 'name_desc':
+        products = products.order_by('-nome')  # Nome Z-A
+
+
+    return render(request, 'store/search_results.html', {'products': products, 'filters': {
             'price_min': price_min,
             'price_max': price_max,
             'size': size,
             'category_S': category_S,
             'marca_S': marca_S,
         },
-    })
+                                                         })
 
 def product_view(request, pk):
     product = get_object_or_404(Prodotto, id=pk)
@@ -46,13 +60,6 @@ def product_view(request, pk):
     user_advices=Prodotto.objects.filter(likes__in=user_likes).exclude(id=product.id).filter(is_sold=False)
     return render(request, "store/product.html", {'product':product, 'advices':advices, 'user_likes':user_likes, 'user_advices':user_advices})
 
-def category(request, cat):
-    try:
-        myCategory = Category.objects.get(id=cat)
-        products = Prodotto.objects.filter(category = myCategory).filter(is_sold= False)
-    except:
-        return redirect('/store')
-    return render(request, 'store/category.html', {'products':products, 'category':myCategory})
 
 def home_store(request):
     order_by = request.GET.get('order_by', 'price_asc')

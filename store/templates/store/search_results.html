@@ -1,0 +1,95 @@
+{%extends 'base.html' %}
+
+{% block head_plug %}
+    <style>
+    form {
+        margin-left: 40px;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+        <!-- Header-->
+        <header class="bg-dark py-1">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                </div>
+            </div>
+        </header>
+        <!-- Section-->
+        <section class="py-5">
+        <form method="GET" action="">
+               <label for="order_by">Ordina per:</label>
+                <select name="order_by" id="order_by" onchange="this.form.submit()">
+                    <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>
+                        Prezzo: crescente
+                    </option>
+                    <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>
+                        Prezzo: decrescente
+                    </option>
+                    <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>
+                        Nome: A-Z
+                    </option>
+                    <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>
+                        Nome: Z-A
+                    </option>
+                </select>
+        <!-- Passa gli altri parametri GET come hidden inputs -->
+    <input type="hidden" name="query" value="{{ request.GET.query }}">
+    <input type="hidden" name="price_min" value="{{ request.GET.price_min }}">
+    <input type="hidden" name="price_max" value="{{ request.GET.price_max }}">
+    <input type="hidden" name="size" value="{{ request.GET.size }}">
+    <input type="hidden" name="category_S" value="{{ request.GET.category_S }}">
+    <input type="hidden" name="marca_S" value="{{ request.GET.marca_S }}">
+            </form>
+
+
+
+
+        {% if products %}
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                    {% for product in products%}
+
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{{product.image.url}}" alt="..." style="height: 268px; width: auto; object-fit: contain"/>
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{product.nome}}</h5>
+                                    <!-- Product price-->
+
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <p>{{ product.size }}</p>
+                                    <p><strong>${{product.price}}</strong></p>
+                                </div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/store/product/{{ product.id }}/">View product</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        {% else %}
+            <br><br><br><br>
+<div style="text-align: center; height: 450px; font-size: 90px; display: flex; justify-content: center; align-items: center; background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 20px">
+    <div>
+        <i class="fas fa-exclamation-circle" style="font-size: 120px; margin-bottom: 20px;"></i>
+        <div>NON CI SONO PRODOTTI CHE SODDISFANO I REQUISITI</div>
+    </div>
+</div>        {% endif %}
+        </section>
+
+
+{% endblock %}
+        
