@@ -1,17 +1,18 @@
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
 from django.utils.functional import empty
 
 from checkout.models import Order
 from reviews.models import Review
-from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm
+from .forms import UserRegistrationForm, CustomerProfileForm, ProductForm, PasswordResetForm
 from .models import Supplier 
 from store.models import Customer, Prodotto
 # Create your views here.
@@ -49,6 +50,30 @@ def register(request):
         user_form = UserRegistrationForm()
 
     return render(request, 'account/register.html', {'user_form': user_form})
+
+def reset_password_view(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            username = form.cleaned_data['username']
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                messages.error(request, 'Inserisci un username esistente')
+                return redirect('account:password_reset')
+            user.set_password(new_password)
+            user.save()
+
+            # Aggiorna la sessione dell'utente per evitare il logout
+            update_session_auth_hash(request, user)
+
+            messages.success(request, "La password è stata cambiata con successo!")
+            return redirect('account:login')  # Modifica con la tua URL per il profilo
+    else:
+        form = PasswordResetForm()
+
+    return render(request, 'account/reset_password.html', {'form': form})
 
 class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     model = Customer
@@ -115,6 +140,7 @@ class SupplierProfileView(LoginRequiredMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
 
+@login_required
 def addproduct(request):  # Assicurati che sia 'supplier_id'
     # Cerca il fornitore con il supplier_id e verificane la proprietà
 
@@ -133,6 +159,7 @@ def addproduct(request):  # Assicurati che sia 'supplier_id'
 
     return render(request, 'account/add_product.html', {'form': form, 'supplier': supplier})
 
+@login_required
 def delete_product(request, pk):
     product = get_object_or_404(Prodotto, id=pk)
     print(f"Attempting to delete product: {product.nome}")

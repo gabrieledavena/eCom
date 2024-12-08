@@ -19,9 +19,6 @@
 
         }
 
-        .left {
-            background-color: #eafafd;
-        }
 
         div.box {
             width:800px; height:480px;
@@ -155,15 +152,27 @@
 
 <div class="mycontainer">
         <div class="left">
-            <div class="card-body">
-                <div style="text-align: center;">
-                <h3 class="card-title" style="text-transform: uppercase" >{{ customer.nome }} {{ customer.cognome }}</h3>
-                    <br>
-                <p class="card-text"><strong>Email: {{ customer.email }}</strong></p>
-                <p class="card-text"><strong>Indirizzo: {{ customer.indirizzo }}</strong></p>
-                <a  href="{% url 'account:update_user' customer.pk %}" class="btn btn-outline-dark" >Aggiorna profilo</a>
-                </div>
-            </div>
+            <div class="card-body" style="background-color: #f9f9f9; border-radius: 10px; padding: 20px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <h3 class="card-title" style="text-transform: uppercase; font-size: 24px; font-weight: bold; color: #333;">
+            {{ customer.nome }} {{ customer.cognome }}
+        </h3>
+    </div>
+    <hr style="border: 1px solid #ccc; margin: 15px 0;">
+    <div style="text-align: center; color: #555;">
+        <p class="card-text" style="font-size: 18px; margin-bottom: 10px;">
+            <strong>Email:</strong> {{ customer.email }}
+        </p>
+        <p class="card-text" style="font-size: 18px; margin-bottom: 20px;">
+            <strong>Indirizzo:</strong> {{ customer.indirizzo }}
+        </p>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'account:update_user' customer.pk %}" class="btn btn-dark" style="width: 80%; font-size: 16px; padding: 10px; border-radius: 5px;">
+            Aggiorna profilo
+        </a>
+    </div>
+</div>
 
         </div>
         <div class="right">
@@ -202,7 +211,7 @@
                         </div>
                     </div>
                 {% empty %}
-                    <li>Non hai ancora aggiunto like a nessun prodotto.</li>
+                    Non hai ancora aggiunto like a nessun prodotto.
                 {% endfor %}
             </div>
         </div>
@@ -211,6 +220,7 @@
 </div>
     <!-- fine sezione alta -->
 
+    {% if transiting_orders %}
     <!-- ORDINI -->
     <div class="box_order" style="margin: 30px">
     <div style="text-align: center;">
@@ -245,7 +255,7 @@
 
             </div>
     </div>
-
+    {% endif %}
 
 
 

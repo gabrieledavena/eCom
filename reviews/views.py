@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from checkout.models import Order
@@ -5,6 +6,7 @@ from reviews.forms import ReviewForm
 
 
 # Create your views here.
+@login_required
 def create_review(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     if request.method == 'POST':

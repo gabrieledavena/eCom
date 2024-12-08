@@ -1,4 +1,5 @@
 from itertools import product
+from pyexpat.errors import messages
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,8 @@ from django.utils import timezone
 from account.models import Supplier
 from cart.cart import Cart
 from checkout.models import Notification, Order, OrderItem
+from django.contrib import messages
+
 
 
 # Create your views here.
@@ -27,6 +30,9 @@ def mark_as_read(request, notification_id):
 
 @login_required
 def checkout(request):
+    if request.user.is_staff:
+        messages.success(request, 'Devi essere un customer')
+        return redirect('account:login')
     cart = Cart(request)
     suppliers = cart.get_suppliers()
     for supplier in suppliers:
