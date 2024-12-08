@@ -38,7 +38,8 @@
 {%block content%}
 <div class="container">
     <div class="left">
-            <img src="{% static 'home.png' %}"   alt="Flying Sneakers" style="width: 100%;">
+           <a href="{% url 'store:home_store' %}"> 
+        <img src="{% static 'home.png' %}"   alt="Flying Sneakers" style="width: 100%;"></a>
     </div>
     
     <div class="right">
