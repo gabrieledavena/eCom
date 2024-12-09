@@ -5,8 +5,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from account.models import Supplier, Customer
-from checkout.models import Order
-from reviews.models import Review
 from store.models import Prodotto, Marca, Category
 from django.contrib.auth import get_user_model
 
@@ -183,7 +181,6 @@ class CustomerViewTests(TestCase):
             email='mario.rossi@example.com',
             indirizzo='Via Roma 1',
         )
-        self.client.login(username='testuser', password='password123')
         self.user2 = get_user_model().objects.create_user(
             username='testsup',
             password='suppassword123',
@@ -195,6 +192,8 @@ class CustomerViewTests(TestCase):
         """
         Testa la vista di aggiornamento dei dati del customer.
         """
+        self.client.login(username='testuser', password='password123')
+
         # URL per la vista di aggiornamento
         url = reverse('account:update_user', kwargs={'pk': self.customer.pk})
 
@@ -223,6 +222,7 @@ class CustomerViewTests(TestCase):
         Testa la vista del profilo del customer.
         """
         # Creazione di alcuni prodotti e ordini per il test
+        self.client.login(username='testuser', password='password123')
 
         marca = Marca.objects.create(nome='pro')
         category = Category.objects.create(nome='pro')
