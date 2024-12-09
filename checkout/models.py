@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from account.models import Customer, Supplier
-from cart import cart
 from store.models import Prodotto
 
 

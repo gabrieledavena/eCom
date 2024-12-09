@@ -65,8 +65,6 @@ def reset_password_view(request):
             user.set_password(new_password)
             user.save()
 
-            # Aggiorna la sessione dell'utente per evitare il logout
-            update_session_auth_hash(request, user)
 
             messages.success(request, "La password è stata cambiata con successo!")
             return redirect('account:login')  # Modifica con la tua URL per il profilo
