@@ -52,7 +52,7 @@
                     <div class="card-body">
                         <h5 class="card-title d-flex justify-content-between align-items-center">
                             <span>{{ supplier.user }}</span>
-                            <span><strong>{{ supplier.average_rating|floatformat:2 }}</strong></span>
+                            <span style="color: #0a58ca"><strong>{{ supplier.average_rating|floatformat:2 }}</strong></span>
                         </h5>                         
                         <a href="{% url 'account:displaySupplier' supplier.id%}" class="btn btn-outline-dark btn-lg">Visualizza Profilo</a>
                     </div>
