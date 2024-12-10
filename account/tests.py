@@ -5,6 +5,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from account.models import Supplier, Customer
+from checkout.models import Order
+from reviews.models import Review
 from store.models import Prodotto, Marca, Category
 from django.contrib.auth import get_user_model
 
@@ -246,3 +248,162 @@ class CustomerViewTests(TestCase):
         )
 
 
+class SupplierProfileViewTest(TestCase):
+
+    def setUp(self):
+        # Crea un utente e un fornitore
+        self.user = get_user_model().objects.create_user(username='supplier_user', password='password123', is_staff=True)
+        self.other_user = get_user_model().objects.create_user(username='other_user', password='password123')
+        self.customer = Customer.objects.create(user=self.other_user)
+        self.supplier = Supplier.objects.create(user=self.user, is_supplier=True)
+        self.url = reverse('account:supplierprofile', kwargs={'pk': self.supplier.pk})
+
+        # Crea prodotti associati al fornitore
+        self.product1 = Prodotto.objects.create(nome='Product 1', supplier=self.supplier, is_sold=False, marca= Marca.objects.create(nome='test'), category= Category.objects.create(nome='test'))
+        self.product2 = Prodotto.objects.create(nome='Product 2', supplier=self.supplier, is_sold=True,  marca= Marca.objects.create(nome='test'), category= Category.objects.create(nome='test'))
+
+        self.order= Order.objects.create(customer=self.customer, supplier=self.supplier)
+        self.order2= Order.objects.create(customer=self.customer, supplier=self.supplier)
+        # Crea recensioni per il fornitore
+        self.review1 = Review.objects.create(supplier=self.supplier, rating=4, comment='Good', customer=self.customer, order=self.order)
+        self.review2 = Review.objects.create(supplier=self.supplier, rating=5, comment='Excellent', customer=self.customer, order=self.order2)
+
+    def test_supplier_profile_view_authenticated(self):
+        # Effettua il login come il fornitore
+        self.client.login(username='supplier_user', password='password123')
+
+        # Verifica che la vista restituisca lo stato 200
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+        # Verifica che i prodotti filtrati siano nel contesto
+        self.assertIn('products', response.context)
+        self.assertEqual(list(response.context['products']), [self.product1])  # Solo i prodotti non venduti
+
+        # Verifica le recensioni
+        self.assertIn('reviews', response.context)
+        self.assertEqual(list(response.context['reviews']), [self.review1, self.review2])
+
+        # Verifica il calcolo della media
+        self.assertIn('average', response.context)
+        self.assertEqual(response.context['average'], 4)  # Media delle recensioni (4.5 troncato a 4)
+        self.assertEqual(response.context['halfstar'], 1)  # Mezza stella
+        self.assertEqual(response.context['empty'], 0)  # Nessuna stella vuota
+
+    def test_supplier_profile_view_unauthorized(self):
+        # Effettua il login come un utente diverso
+        self.client.login(username='other_user', password='password123')
+
+        # Prova ad accedere al profilo di un altro fornitore
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('store:home_store'))
+
+        # Verifica che il messaggio sia stato impostato
+        messages = list(response.wsgi_request._messages)
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Non hai il permesso di accedere a questo profilo")
+
+
+
+class AddProductTest(TestCase):
+
+    def setUp(self):
+        # Crea un utente e un fornitore associato
+        self.user = get_user_model().objects.create_user(username='supplier_user', password='password123', is_staff=True)
+        self.other_user = User.objects.create_user(username='other_user', password='password123')
+        self.supplier = Supplier.objects.create(user=self.user, is_supplier=True)
+        self.url = reverse('account:addproduct')
+
+        self.marca = Marca.objects.create(nome='Test Brand')
+        self.category = Category.objects.create(nome='Test Category')
+    def test_add_product_authenticated(self):
+        # Effettua il login come il fornitore
+        self.client.login(username='supplier_user', password='password123')
+
+        # Crea i dati per un nuovo prodotto
+        data = {
+            'nome': 'New Product',
+            'description': 'A wonderful new product',
+            'price': 100.0,
+            'size':40,
+            'marca': self.marca.id,
+            'category': self.category.id,
+        }
+        response = self.client.post(self.url, data)
+        self.assertRedirects(response, reverse('account:supplierprofile', kwargs={'pk': self.supplier.pk}))
+
+
+        # Verifica che il prodotto sia stato salvato con il fornitore corretto
+        product = Prodotto.objects.get(nome='NEW PRODUCT')
+        self.assertEqual(product.supplier, self.supplier)  # Verifica che il fornitore sia quello giusto
+
+    def test_add_product_invalid(self):
+        # Effettua il login come il fornitore
+        self.client.login(username='supplier_user', password='password123')
+
+        # Dati non validi (manca il nome)
+        data = {
+            'nome': '',  # Campo nome vuoto (non valido)
+            'price': 100.0,
+            'size': 40,
+            'marca': self.marca.id,
+            'category': self.category.id,
+        }
+
+        response = self.client.post(self.url, data)
+
+        # Verifica che la risposta contenga il form
+        self.assertContains(response, '<form')
+
+
+class DeleteProductTest(TestCase):
+
+    def setUp(self):
+        # Crea un utente e un fornitore associato
+        self.user = get_user_model().objects.create_user(username='supplier_user', password='password123', is_staff=True)
+        self.supplier = Supplier.objects.create(user=self.user, is_supplier=True)
+
+        # Crea oggetti Marca e Category per il test
+        self.marca = Marca.objects.create(nome='Test Brand')
+        self.category = Category.objects.create(nome='Test Category')
+
+        # Crea un prodotto da associare al fornitore
+        self.product = Prodotto.objects.create(
+            nome='Product to Delete',
+            description='A product that will be deleted',
+            price=100.0,
+            size=40,
+            marca=self.marca,
+            category=self.category,
+            supplier=self.supplier,
+            is_sold=False,
+        )
+
+        # URL per eliminare il prodotto
+        self.url = reverse('account:deleteproduct', kwargs={'pk': self.product.pk})
+
+    def test_delete_product_authenticated_and_owner(self):
+        # Effettua il login come il fornitore che possiede il prodotto
+        self.client.login(username='supplier_user', password='password123')
+        self.assertEqual(Prodotto.objects.filter(id=self.product.id).count(), 1)
+
+        # Simula la richiesta di eliminazione (POST)
+        response = self.client.post(self.url)
+
+        # Verifica che il prodotto sia stato eliminato
+        self.assertEqual(Prodotto.objects.filter(id=self.product.id).count(), 0)
+
+        # Verifica che ci sia una redirezione
+        self.assertRedirects(response, reverse('account:supplierprofile', kwargs={'pk': self.supplier.pk}))
+
+    def test_delete_product_not_found(self):
+        # Test che il prodotto non esiste più (usiamo un id che non esiste)
+        self.client.login(username='supplier_user', password='password123')
+
+        invalid_url = reverse('account:deleteproduct', kwargs={'pk': 999})
+
+        # Simula la richiesta di eliminazione con un prodotto che non esiste
+        response = self.client.post(invalid_url)
+
+        # Verifica che venga restituito un errore 404 (Not Found)
+        self.assertEqual(response.status_code, 404)
