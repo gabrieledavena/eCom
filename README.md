@@ -22,8 +22,9 @@ Clonare il repository:
 
 Creare un ambiente virtuale Python e attivarlo:
 
-    python3 -m venv venv
-    source venv/bin/activate   # Su Windows usa venv\Scripts\activate
+    pip install pipenv
+    pipenv install
+    pipenv shell
 
 Installare le dipendenze:
 
