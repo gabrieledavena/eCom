@@ -48,6 +48,7 @@ def cart_add(request):
             return response
 
 
+
 @login_required
 def cart_delete(request):
     cart = Cart(request)
