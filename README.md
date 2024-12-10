@@ -11,12 +11,6 @@ Benvenuto in **eCom**, una piattaforma e-commerce completamente funzionale costr
 - **Recensioni e Valutazioni**: I clienti possono lasciare recensioni e valutazioni per i prodotti acquistati.
 - **Dashboard Fornitori**: I fornitori possono visualizzare e gestire i propri prodotti e ordini.
 
-## Requisiti
-
-- Python 3.8+
-- Django 3.2+
-- PostgreSQL (o SQLite per lo sviluppo)
-
 ## Installazione
 
 Clonare il repository:
