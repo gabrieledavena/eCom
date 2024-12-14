@@ -18,7 +18,9 @@
                     <input class="form-control me-2" type="search" name="query" placeholder="Cerca prodotti..." aria-label="Search", value="{{ request.GET.query }}">
                     <input type="hidden" name="price_min" value="{{ request.GET.price_min }}">
                     <input type="hidden" name="price_max" value="{{ request.GET.price_max }}">
-    
+                    <input type="hidden" name="size" value="{{ request.GET.size }}">
+                    <input type="hidden" name="category_S" value="{{ request.GET.category_S }}">
+                <input type="hidden" name="marca_S" value="{{ request.GET.marca_S }}">
                     <button type="button" class="btn btn-outline-secondary" id="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal"><i class="fas fa-filter"></i></button>
             </form>
             

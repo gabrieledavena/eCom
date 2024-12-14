@@ -225,7 +225,7 @@ input[type="radio"]:checked + .radio-label {
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-outline-success" style="margin-right: 10px">Applica Filtri</button>
-                                <button type="reset" class="btn btn-outline-danger">Azzera Filtri</button>
+                                <a href="{% url 'store:home_store' %}" class="btn btn-outline-danger">Azzera Filtri</a>
                             </div>
                         </form>
                    
@@ -308,6 +308,7 @@ input[type="radio"]:checked + .radio-label {
     const radioButtonsCategoria = document.querySelectorAll('input[name="category_S"]');
     const radioButtonsSize = document.querySelectorAll('input[name="size"]');
 
+
     // Funzione per cambiare il colore del label quando un radio button è selezionato
     function handleRadioChange(radioButtons) {
         radioButtons.forEach(function (radio) {
@@ -343,7 +344,10 @@ input[type="radio"]:checked + .radio-label {
     applySelectedClass(radioButtonsMarca);
     applySelectedClass(radioButtonsCategoria);
     applySelectedClass(radioButtonsSize);
-});
+
+            
+            
+            });
         </script>
     </body>
 </html>

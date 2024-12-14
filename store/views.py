@@ -9,7 +9,7 @@ from .models import Prodotto, Category
 def search(request):
     query = request.GET.get('query', '')
     if not query == '':
-        products = Prodotto.objects.filter(nome__icontains=query).filter(is_sold= False) if query else []
+        products = Prodotto.objects.filter(nome__icontains=query).filter(is_sold= False)
     else:
         products = Prodotto.objects.filter(is_sold= False)
     price_min = request.GET.get('price_min')
